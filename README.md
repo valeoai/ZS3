@@ -13,7 +13,7 @@ If you find this code useful for your research, please cite our [paper](https://
 ```
 @inproceedings{bucher2019zero,
   title={Zero-Shot Semantic Segmentation},
-  author={Bucher, Maxime and Vu, Tuan-Hung and Jain and Cord, Mathieu and P{\'e}rez, Patrick},
+  author={Bucher, Maxime and Vu, Tuan-Hung and Cord, Mathieu and P{\'e}rez, Patrick},
   booktitle={NeurIPS},
   year={2019}
 }
