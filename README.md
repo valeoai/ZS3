@@ -1,4 +1,4 @@
-# zero_shot_semantic_segmentation
+# Zero-Shot Semantic Segmentation
 
 ## Paper
 ![](./teaser.png)
