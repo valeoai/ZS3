@@ -1,0 +1,5 @@
+2 unseen: cow,motorbike
+4 unseen: cow,motorbike,airplane,sofa
+6 unseen: cow,motorbike,airplane,sofa,cat,tv
+8 unseen: cow,motorbike,airplane,sofa,cat,tv,train,bottle
+10 unseen: cow,motorbike,airplane,sofa,cat,tv,train,bottle,chair,potted plant

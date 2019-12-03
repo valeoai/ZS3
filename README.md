@@ -83,3 +83,62 @@ The Pascal-Context dataset directory should have this basic structure:
 <root_dir>/data/context/classes-59.txt     % Pascal context 59 classes
 <root_dir>/data/context/VOCdevkit/VOC2010/JPEGImages     % Pascal VOC images
 ```
+
+### Training
+
+#### Pascal-VOC
+Follow steps below to train your model:
+
+1. Train deeplabv3+ using Pascal VOC dataset and ResNet as backbone:
+
+```Shell
+train_pascal.py
+```
+* Main options
+    - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
+    - `exp_path`: Path to saved logs and weights folder.
+    - `checkname`: Name of the saved logs and weights folder.
+    - `unseen_classes_idx`: List of idx of unseen classes.
+
+
+
+2. Train GMMN and finetune the last classication layer:
+
+```Shell
+train_pascal_GMMN.py
+```
+* Main options
+    - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
+    - `resume`: Path to trained deeplabv3+ weights.
+    - `exp_path`: Path to saved logs and weights folder.
+    - `checkname`: Name of the saved logs and weights folder.
+    - `seen_classes_idx_metric`: List of idx of seen classes.
+    - `unseen_classes_idx_metric`: List of idx of unseen classes.
+
+
+#### Pascal-Context
+Follow steps below to train your model:
+
+1. Train deeplabv3+ using Pascal Context dataset and ResNet as backbone:
+
+```Shell
+train_context.py
+```
+* Main options
+    - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
+    - `exp_path`: Path to saved logs and weights folder.
+    - `checkname`: Name of the saved logs and weights folder.
+    - `unseen_classes_idx`: List of idx of unseen classes.
+
+2. Train GMMN and finetune the last classication layer:
+
+```Shell
+train_context_GMMN.py
+```
+* Main options
+    - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
+    - `resume`: Path to trained deeplabv3+ weights.
+    - `exp_path`: Path to saved logs and weights folder.
+    - `checkname`: Name of the saved logs and weights folder.
+    - `seen_classes_idx_metric`: List of idx of seen classes.
+    - `unseen_classes_idx_metric`: List of idx of unseen classes.
