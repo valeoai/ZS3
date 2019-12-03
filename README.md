@@ -37,7 +37,7 @@ $ git clone https://github.com/valeoai/zs3net
 
 2. Install this repository and the dependencies using pip:
 ```bash
-$ pip install -e zs3
+$ pip install -e zs3net
 ```
 
 With this, you can edit the ZS3Net code on the fly and import function 
@@ -45,7 +45,7 @@ and classes of ZS3Net in other project as well.
 
 3. Optional. To uninstall this package, run:
 ```bash
-$ pip uninstall zs3
+$ pip uninstall zs3net
 ```
 
 ### Datasets
@@ -142,3 +142,10 @@ train_context_GMMN.py
     - `checkname`: Name of the saved logs and weights folder.
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
+    
+    
+## Acknowledgements
+This codebase is heavily borrowed from [pytorch-deeplab-xception](https://github.com/jfzhang95/pytorch-deeplab-xception).
+
+## License
+ZS3Net is released under the [Apache 2.0 license](./LICENSE).

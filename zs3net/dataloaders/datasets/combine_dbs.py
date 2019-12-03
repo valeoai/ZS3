@@ -60,7 +60,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import sbd
     import pascal
-    from dataloaders import sbd
+    from zs3net.dataloaders import sbd
     import torch
     import numpy as np
     from utils import decode_segmap
