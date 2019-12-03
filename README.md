@@ -37,7 +37,7 @@ $ git clone https://github.com/valeoai/zs3net
 
 2. Install this repository and the dependencies using pip:
 ```bash
-$ pip install -e zs3net
+$ pip install -e ZS3
 ```
 
 With this, you can edit the ZS3Net code on the fly and import function 
@@ -45,8 +45,10 @@ and classes of ZS3Net in other project as well.
 
 3. Optional. To uninstall this package, run:
 ```bash
-$ pip uninstall zs3net
+$ pip uninstall ZS3
 ```
+
+You can take a look at the Dockerfile if you are uncertain about steps to install this project.
 
 ### Datasets
 
