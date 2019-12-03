@@ -26,13 +26,13 @@ Semantic segmentation models are limited in their ability to scale to large numb
 
 ### Pre-requisites
 * Python 3.6
-* Pytorch >= 0.4.1 or higher
+* Pytorch >= 1.0 or higher
 * CUDA 9.0 or higher
 
 ### Installation
 1. Clone the repo:
 ```bash
-$ git clone https://github.com/valeoai/zs3net
+$ git clone https://github.com/valeoai/ZS3
 ```
 
 2. Install this repository and the dependencies using pip:
@@ -40,8 +40,7 @@ $ git clone https://github.com/valeoai/zs3net
 $ pip install -e ZS3
 ```
 
-With this, you can edit the ZS3Net code on the fly and import function 
-and classes of ZS3Net in other project as well.
+With this, you can edit the ZS3 code on the fly and import function and classes of ZS3 in other project as well.
 
 3. Optional. To uninstall this package, run:
 ```bash
@@ -53,11 +52,11 @@ You can take a look at the Dockerfile if you are uncertain about steps to instal
 ### Datasets
 
 #### Pascal-VOC 2012
-* **Pascal-VOC 2012**: Please follow the instructions [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html#devkit) to download images and semantic segmentation annotations.
+* **Pascal-VOC 2012**: Please follow the instructions [here](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html) to download images and semantic segmentation annotations.
 
-* **Semantic Boundaries Dataset**: Please follow the instructions [here](http://home.bharathh.info/pubs/codes/SBD/download.html) to download images and semantic segmentation annotations. Use [this](http://home.bharathh.info/pubs/codes/SBD/train_noval.txt) train set, which excludes overlap with Pascal-VOC. 
+* **Semantic Boundaries Dataset**: Please follow the instructions [here](http://home.bharathh.info/pubs/codes/SBD/download.html) to download images and semantic segmentation annotations. Use [this](http://home.bharathh.info/pubs/codes/SBD/train_noval.txt) train set, which excludes overlap with Pascal-VOC validation set. 
 
-The Pascal-VOC and SBD datasets directory should have this basic structure:
+The Pascal-VOC and SBD datasets directory should have this structure:
 ```bash
 <root_dir>/data/VOC2012/    % Pascal VOC and SBD datasets root
 <root_dir>/data/VOC2012/ImageSets/Segmentation/     % Pascal VOC splits
@@ -75,7 +74,7 @@ The Pascal-VOC and SBD datasets directory should have this basic structure:
 
 * **Pascal-Context**: Please follow the instructions [here](https://cs.stanford.edu/~roozbeh/pascal-context/) to download segmentation annotations.
 
-The Pascal-Context dataset directory should have this basic structure:
+The Pascal-Context dataset directory should have this structure:
 ```bash
 <root_dir>/data/context/    % Pascal context dataset root
 <root_dir>/data/context/train.txt     % Pascal context train split
