@@ -58,10 +58,11 @@ $ pip uninstall zs3
 The Pascal-VOC and SBD datasets directory should have this basic structure:
 ```bash
 <root_dir>/data/VOC2012/    % Pascal VOC and SBD datasets root
-<root_dir>/data/VOC2012/ImageSets/Segmentation/     % Pascal VOC spits
+<root_dir>/data/VOC2012/ImageSets/Segmentation/     % Pascal VOC splits
 <root_dir>/data/VOC2012/JPEGImages/     % Pascal VOC images
 <root_dir>/data/VOC2012/SegmentationClass/      % Pascal VOC segmentation maps
-<root_dir>/data/VOC2012/benchmark_RELEASE/      % SBD dataset
+<root_dir>/data/VOC2012/benchmark_RELEASE/dataset/img      % SBD images
+<root_dir>/data/VOC2012/benchmark_RELEASE/dataset/cls      % SBD segmentation maps
 <root_dir>/data/VOC2012/benchmark_RELEASE/dataset/train_noval.txt       % SBD train set
 ```
 
@@ -72,9 +73,12 @@ The Pascal-VOC and SBD datasets directory should have this basic structure:
 
 * **Pascal-Context**: Please follow the instructions [here](https://cs.stanford.edu/~roozbeh/pascal-context/) to download segmentation annotations.
 
+The Pascal-Context dataset directory should have this basic structure:
 ```bash
 <root_dir>/data/context/    % Pascal context dataset root
-<root_dir>/data/context/full_annotations/trainval/     % Pascal context annotations
+<root_dir>/data/context/train.txt     % Pascal context train split
+<root_dir>/data/context/val.txt     % Pascal context val split
+<root_dir>/data/context/full_annotations/trainval/     % Pascal context segmentation maps
 <root_dir>/data/context/full_annotations/labels.txt     % Pascal context 459 classes
 <root_dir>/data/context/classes-59.txt     % Pascal context 59 classes
 <root_dir>/data/context/VOCdevkit/VOC2010/JPEGImages     % Pascal VOC images
