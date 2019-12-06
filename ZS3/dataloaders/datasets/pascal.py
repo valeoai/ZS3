@@ -115,18 +115,7 @@ class VOCSegmentation(Dataset):
 
 
     def init_embeddings(self):
-        if self.load_embedding == 'attributes':
-            embed_arr = np.load('embeddings/pascal/pascalvoc_class_attributes.npy')
-        elif self.load_embedding == 'w2c':
-            embed_arr = load_obj('embeddings/pascal/w2c/norm_embed_arr_' + str(self.w2c_size))
-        elif self.load_embedding == 'w2c_bg':
-            embed_arr = np.load('embeddings/pascal/pascalvoc_class_w2c_bg.npy')
-        elif self.load_embedding == 'my_w2c':
-            embed_arr = np.load('embeddings/pascal/pascalvoc_class_w2c.npy')
-        elif self.load_embedding == 'fusion':
-            attributes = np.load('embeddings/pascal/pascalvoc_class_attributes.npy')
-            w2c = np.load('embeddings/pascal/pascalvoc_class_w2c.npy')
-            embed_arr = np.concatenate((attributes, w2c), axis=1)
+        embed_arr = load_obj('embeddings/pascal/w2c/norm_embed_arr_' + str(self.w2c_size))
         self.embeddings = torch.nn.Embedding(embed_arr.shape[0], embed_arr.shape[1])
         self.embeddings.weight.requires_grad = False
         self.embeddings.weight.data.copy_(torch.from_numpy(embed_arr))
@@ -146,7 +135,6 @@ class VOCSegmentation(Dataset):
                     has_unseen_class = True
             if has_unseen_class:
                 _target = Image.open('weak_label_pascal_10_unseen_top_by_image_25.0/pascal/'+(self.categories[index].split('/'))[-1].split('.')[0]+'.jpg')
-
 
         sample = {'image': _img, 'label': _target}
 
