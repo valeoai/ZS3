@@ -176,6 +176,26 @@ train_context_GMMN.py
     -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_final.pth.tar)
 
 
+2 (bis). Train GMMN with graph context and finetune the last classication layer of a trained deeplabv3+ model:
+
+```Shell
+train_context_GMMN_GCNcontext.py
+```
+* Main options
+    - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
+    - `resume`: Path to trained deeplabv3+ weights.
+    - `exp_path`: Path to saved logs and weights folder.
+    - `checkname`: Name of the saved logs and weights folder.
+    - `seen_classes_idx_metric`: List of idx of seen classes.
+    - `unseen_classes_idx_metric`: List of idx of unseen classes.
+    
+* Final deeplabv3+
+    -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_GC_final.pth.tar)
+    -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_GC_final.pth.tar)
+    -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_GC_final.pth.tar)
+    -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_08_unseen_GMMN_GC_final.pth.tar)
+    -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_GC_final.pth.tar)
+
 
 
 ## Acknowledgements
