@@ -90,7 +90,7 @@ ZS3/data/context/VOCdevkit/VOC2010/JPEGImages     % Pascal VOC images
 #### Pascal-VOC
 Follow steps below to train your model:
 
-1. Train deeplabv3+ using Pascal VOC dataset and ResNet as backbone:
+1. Train deeplabv3+ using Pascal VOC dataset and ResNet as backbone, pretrained on imagenet ([weights here](https://github.com/valeoai/ZS3/releases/download/v0.1/resnet_backbone_pretrained_imagenet_wo_pascalvoc.pth.tar)):
 
 ```Shell
 train_pascal.py
@@ -100,6 +100,14 @@ train_pascal.py
     - `exp_path`: Path to saved logs and weights folder.
     - `checkname`: Name of the saved logs and weights folder.
     - `unseen_classes_idx`: List of idx of unseen classes.
+
+* Trained deeplabv3+
+    -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_02_unseen.pth.tar)
+    -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_04_unseen.pth.tar)
+    -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_06_unseen.pth.tar)
+    -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_08_unseen.pth.tar)
+    -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_10_unseen.pth.tar)
+
 
 
 
@@ -116,11 +124,18 @@ train_pascal_GMMN.py
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
 
+* Final deeplabv3+
+    -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_02_unseen_GMMN_final.pth.tar)
+    -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_04_unseen_GMMN_final.pth.tar)
+    -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_06_unseen_GMMN_final.pth.tar)
+    -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_08_unseen_GMMN_final.pth.tar)
+    -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_10_unseen_GMMN_final.pth.tar)
+
 
 #### Pascal-Context
 Follow steps below to train your model:
 
-1. Train deeplabv3+ using Pascal Context dataset and ResNet as backbone:
+1. Train deeplabv3+ using Pascal Context dataset and ResNet as backbone, pretrained on imagenet ([weights here](https://github.com/valeoai/ZS3/releases/download/0.2/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar)):
 
 ```Shell
 train_context.py
@@ -131,7 +146,16 @@ train_context.py
     - `checkname`: Name of the saved logs and weights folder.
     - `unseen_classes_idx`: List of idx of unseen classes.
 
-2. Train GMMN and finetune the last classication layer:
+* Trained deeplabv3+
+    -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_02_unseen.pth.tar)
+    -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_04_unseen.pth.tar)
+    -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_06_unseen.pth.tar)
+    -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_08_unseen.pth.tar)
+    -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_10_unseen.pth.tar)
+
+
+
+2. Train GMMN and finetune the last classication layer of a trained deeplabv3+ model:
 
 ```Shell
 train_context_GMMN.py
@@ -144,7 +168,16 @@ train_context_GMMN.py
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
     
-    
+* Final deeplabv3+
+    -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_final.pth.tar)
+    -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_final.pth.tar)
+    -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_final.pth.tar)
+    -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_08_unseen_GMMN_final.pth.tar)
+    -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_final.pth.tar)
+
+
+
+
 ## Acknowledgements
 This codebase is heavily borrowed from [pytorch-deeplab-xception](https://github.com/jfzhang95/pytorch-deeplab-xception).
 
