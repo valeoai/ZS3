@@ -93,7 +93,7 @@ Follow steps below to train your model:
 1. Train deeplabv3+ using Pascal VOC dataset and ResNet as backbone, pretrained on imagenet ([weights here](https://github.com/valeoai/ZS3/releases/download/v0.1/resnet_backbone_pretrained_imagenet_wo_pascalvoc.pth.tar)):
 
 ```Shell
-train_pascal.py
+python train_pascal.py
 ```
 * Main options
     - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
@@ -101,7 +101,7 @@ train_pascal.py
     - `checkname`: Name of the saved logs and weights folder.
     - `unseen_classes_idx`: List of idx of unseen classes.
 
-* Trained deeplabv3+
+* Trained deeplabv3+ weights
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_02_unseen.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_04_unseen.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pretrained_pascal_voc_06_unseen.pth.tar)
@@ -114,17 +114,17 @@ train_pascal.py
 2. Train GMMN and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
-train_pascal_GMMN.py
+python train_pascal_GMMN.py
 ```
 * Main options
     - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
-    - `resume`: Path to trained deeplabv3+ weights.
+    - `resume`: Path to deeplabv3+ weights.
     - `exp_path`: Path to saved logs and weights folder.
     - `checkname`: Name of the saved logs and weights folder.
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
 
-* Final deeplabv3+ and GMMN
+* Final deeplabv3+ and GMMN weights
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_02_unseen_GMMN_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_04_unseen_GMMN_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_06_unseen_GMMN_final.pth.tar)
@@ -138,7 +138,7 @@ Follow steps below to train your model:
 1. Train deeplabv3+ using Pascal Context dataset and ResNet as backbone, pretrained on imagenet ([weights here](https://github.com/valeoai/ZS3/releases/download/0.2/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar)):
 
 ```Shell
-train_context.py
+python train_context.py
 ```
 * Main options
     - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
@@ -146,7 +146,7 @@ train_context.py
     - `checkname`: Name of the saved logs and weights folder.
     - `unseen_classes_idx`: List of idx of unseen classes.
 
-* Trained deeplabv3+
+* Trained deeplabv3+ weights
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_02_unseen.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_04_unseen.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pretrained_pascal_context_06_unseen.pth.tar)
@@ -158,17 +158,17 @@ train_context.py
 2. Train GMMN and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
-train_context_GMMN.py
+python train_context_GMMN.py
 ```
 * Main options
     - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
-    - `resume`: Path to trained deeplabv3+ weights.
+    - `resume`: Path to deeplabv3+ weights.
     - `exp_path`: Path to saved logs and weights folder.
     - `checkname`: Name of the saved logs and weights folder.
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
     
-* Final deeplabv3+ and GMMN
+* Final deeplabv3+ and GMMN weights
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_final.pth.tar)
@@ -176,27 +176,38 @@ train_context_GMMN.py
     -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_final.pth.tar)
 
 
-2 (bis). Train GMMN with graph context and finetune the last classification layer of the trained deeplabv3+ model:
+(2 bis). Train GMMN with graph context and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
-train_context_GMMN_GCNcontext.py
+python train_context_GMMN_GCNcontext.py
 ```
 * Main options
     - `imagenet_pretrained_path`: Path to ImageNet pretrained weights.
-    - `resume`: Path to trained deeplabv3+ weights.
+    - `resume`: Path to deeplabv3+ weights.
     - `exp_path`: Path to saved logs and weights folder.
     - `checkname`: Name of the saved logs and weights folder.
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
     
-* Final deeplabv3+ and GMMN with graph context
+* Final deeplabv3+ and GMMN with graph context weights
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_GC_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_GC_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_GC_final.pth.tar)
     -  [8 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_08_unseen_GMMN_GC_final.pth.tar)
     -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_GC_final.pth.tar)
 
+### Testing
 
+```Shell
+python eval_pascal.py
+```
+```Shell
+python eval_context.py
+```
+* Main options
+    - `resume`: Path to deeplabv3+ and GMMN weights.
+    - `seen_classes_idx_metric`: List of idx of seen classes.
+    - `unseen_classes_idx_metric`: List of idx of unseen classes.
 
 ## Acknowledgements
 This codebase is heavily borrowed from [pytorch-deeplab-xception](https://github.com/jfzhang95/pytorch-deeplab-xception).
