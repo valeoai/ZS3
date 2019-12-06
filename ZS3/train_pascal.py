@@ -2,11 +2,11 @@ import argparse
 import os
 import numpy as np
 from tqdm import tqdm
-
+import torch
 from ZS3.mypath import Path
 from ZS3.dataloaders import make_data_loader
 from ZS3.modeling.sync_batchnorm.replicate import patch_replication_callback
-from ZS3.modeling.deeplab import *
+from ZS3.modeling.deeplab import DeepLab
 from ZS3.utils.loss import SegmentationLosses
 from ZS3.utils.calculate_weights import calculate_weigths_labels
 from ZS3.utils.lr_scheduler import LR_Scheduler
@@ -279,14 +279,14 @@ def main():
     # checking point
     parser.add_argument('--resume', type=str, default=None,
                         help='put the path to resuming file if needed')
-    parser.add_argument('--checkname', type=str, default='pascal_6_unseen',
+
+    parser.add_argument('--imagenet_pretrained_path', type=str, default='checkpoint/resnet_backbone_pretrained_imagenet_wo_pascalvoc.pth.tar',
                         help='set the checkpoint name')
 
-    parser.add_argument('--imagenet_pretrained_path', type=str, default='/home/docker_user/workspace/zero-shot_object_detection/zs3/imagenet_training/imagenet_pretrain_wo_pascalvoc_checkpoint.pth.tar',
+    parser.add_argument('--exp_path', type=str, default='run',  help='set the checkpoint name')
+
+    parser.add_argument('--checkname', type=str, default='pascal_2_unseen',
                         help='set the checkpoint name')
-
-    parser.add_argument('--exp_path', type=str, default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run',  help='set the checkpoint name')
-
 
     # finetuning pre-trained models
     parser.add_argument('--ft', action='store_true', default=False,
@@ -303,11 +303,11 @@ def main():
     # 8 unseen
     #parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14, 1, 18, 8, 20, 19, 5])
     # 6 unseen
-    parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14, 1, 18, 8, 20])
+    #parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14, 1, 18, 8, 20])
     # 4 unseen
     #parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14, 1, 18])
     # 2 unseen
-    #parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14])
+    parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14])
 
 
     args = parser.parse_args()
