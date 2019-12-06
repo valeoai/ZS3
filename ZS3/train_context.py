@@ -2,11 +2,12 @@ import argparse
 import os
 import numpy as np
 from tqdm import tqdm
+import torch
 
 from ZS3.mypath import Path
 from ZS3.dataloaders import make_data_loader
 from ZS3.modeling.sync_batchnorm.replicate import patch_replication_callback
-from ZS3.modeling.deeplab import *
+from ZS3.modeling.deeplab import DeepLab
 from ZS3.utils.loss import SegmentationLosses
 from ZS3.utils.calculate_weights import calculate_weigths_labels
 from ZS3.utils.lr_scheduler import LR_Scheduler
