@@ -2,23 +2,21 @@ import argparse
 import os
 import numpy as np
 import scipy.sparse as sp
-import queue
 import itertools
 import math
-
+import torch
+from torch import nn
 from tqdm import tqdm
 
-from zs3.mypath import Path
 from zs3.dataloaders import make_data_loader
 from zs3.modeling.sync_batchnorm.replicate import patch_replication_callback
-from zs3.modeling.deeplab import *
+from zs3.modeling.deeplab import DeepLab
 from zs3.utils.loss import SegmentationLosses, GMMNLoss
-from zs3.utils.calculate_weights import calculate_weigths_labels
 from zs3.utils.lr_scheduler import LR_Scheduler
 from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
 from zs3.utils.metrics import Evaluator
-from zs3.modeling.gmmn import *
+from zs3.modeling.gmmn import GMMNnetwork_GCN, GMMNnetwork
 
 
 def sparse_mx_to_torch_sparse_tensor(sparse_mx):
@@ -125,12 +123,7 @@ class Trainer(object):
                                                                                              w2c_size=args.w2c_size,
                                                                                              **kwargs)
 
-        # Define network
-        if args.nonlinear_last_layer:
-            model = DeepLabNonLinearClassifier(args, self.nclass, global_avg_pool_bn=args.global_avg_pool_bn)
-            train_params = [{'params': model.parameters(), 'lr': args.lr}]
-        else:
-            model = DeepLab(num_classes=self.nclass,
+        model = DeepLab(num_classes=self.nclass,
                             backbone=args.backbone,
                             output_stride=args.out_stride,
                             sync_bn=args.sync_bn,
@@ -138,7 +131,7 @@ class Trainer(object):
                             global_avg_pool_bn=args.global_avg_pool_bn,
                         imagenet_pretrained_path=args.imagenet_pretrained_path)
 
-            train_params = [{'params': model.get_1x_lr_params(), 'lr': args.lr},
+        train_params = [{'params': model.get_1x_lr_params(), 'lr': args.lr},
                             {'params': model.get_10x_lr_params(), 'lr': args.lr * 10}]
 
         # Define Optimizer
@@ -151,20 +144,6 @@ class Trainer(object):
         optimizer_generator = torch.optim.Adam(generator.parameters(), lr=args.lr_generator)
         generator_GCN = GMMNnetwork_GCN(args.noise_dim, args.embed_dim, args.hidden_size, args.feature_dim)
         optimizer_generator_GCN = torch.optim.Adam(generator_GCN.parameters(), lr=args.lr_generator)
-
-        '''
-        # Define Criterion
-        # whether to use class balanced weights
-        if args.use_balanced_weights:
-            classes_weights_path = os.path.join(Path.db_root_dir(args.dataset), args.dataset + '_classes_weights.npy')
-            if os.path.isfile(classes_weights_path):
-                weight = np.load(classes_weights_path)
-            else:
-                weight = calculate_weigths_labels(args.dataset, self.train_loader, self.nclass)
-            weight = torch.from_numpy(weight.astype(np.float32))
-        else:
-            weight = None
-        '''
 
         class_weight = torch.ones(self.nclass)
         class_weight[args.unseen_classes_idx_metric] = args.unseen_weight
@@ -215,17 +194,10 @@ class Trainer(object):
                                                                                        3]))
                 checkpoint['state_dict']['decoder.pred_conv.bias'] = torch.rand(self.nclass)
 
-            if args.nonlinear_last_layer:
-                if args.cuda:
-                    self.model.module.deeplab.load_state_dict(checkpoint['state_dict'])
-                    # self.model.module.load_state_dict(checkpoint['state_dict'])
-                else:
-                    self.model.deeplab.load_state_dict(checkpoint['state_dict'])
+            if args.cuda:
+                self.model.module.load_state_dict(checkpoint['state_dict'])
             else:
-                if args.cuda:
-                    self.model.module.load_state_dict(checkpoint['state_dict'])
-                else:
-                    self.model.load_state_dict(checkpoint['state_dict'])
+                self.model.load_state_dict(checkpoint['state_dict'])
 
             if not args.ft:
                 if not args.nonlinear_last_layer and not args.random_last_layer:
@@ -296,12 +268,7 @@ class Trainer(object):
                     except:
                         import pdb;
                         pdb.set_trace()
-                    '''
-                    if args.context_aware:
-                        avg_pool = torch.nn.AvgPool2d(3, stride=1, padding=1, ceil_mode=False, count_include_pad=False)
-                        local_context_i = avg_pool(embedding_i)
-                        local_context_i = local_context_i.permute(0, 2, 3, 1).contiguous().view((-1, args.embed_dim))
-                    '''
+
                     embedding_i = embedding_i.permute(0, 2, 3, 1).contiguous().view((-1, args.embed_dim))
 
                     fake_features_i = torch.zeros(real_features_i.shape)
@@ -317,9 +284,6 @@ class Trainer(object):
                             embedding_class = embedding_i[idx_class]
 
                             if args.context_aware:
-                                # global_context = torch.mean(embedding_i[target_i != 255], dim=0).repeat(embedding_class.shape[0],1)
-                                # local_context = local_context_i[idx_class]
-                                # z = torch.cat((global_context, local_context), 1)
                                 z = torch.mean(embedding_i[target_i != 255], dim=0).repeat(embedding_class.shape[0], 1)
                             else:
                                 z = torch.rand((embedding_class.shape[0], args.noise_dim))
@@ -327,15 +291,9 @@ class Trainer(object):
                             if args.cuda:
                                 z = z.cuda()
 
-                            '''
-                            local_context = []
-                            for i_bath, idx_c in enumerate(embedding_class.shape[0]):
-                                local_context_batch.append()
-                            '''
-                            if args.semantic_reconstruction:
-                                fake_features_class, semantic_pred = self.generator(embedding_class, z.float())
-                            else:
-                                fake_features_class = self.generator(embedding_class, z.float())
+
+
+                            fake_features_class = self.generator(embedding_class, z.float())
 
                             if idx_in in args.seen_classes_idx_metric and not has_unseen_class:
                                 ## in order to avoid CUDA out of memory
@@ -344,11 +302,6 @@ class Trainer(object):
                                 g_loss = self.criterion_generator(fake_features_class[random_idx],
                                                                   real_features_class[random_idx])
                                 generator_loss_sample += g_loss.item()
-                                if args.semantic_reconstruction:
-                                    s_loss = self.criterion_semantic(semantic_pred[random_idx], torch.cat(
-                                        (embedding_class[random_idx], z[random_idx]), 1))
-                                    semantic_reconstruction_loss_sample += s_loss.item()
-                                    g_loss = g_loss + (args.lbd_sr * s_loss)
                                 g_loss.backward()
                                 self.optimizer_generator.step()
 
@@ -690,8 +643,7 @@ def main():
     parser.add_argument('--no-val', action='store_true', default=False,
                         help='skip validation during training')
 
-    ### FOR IMAGE SELECTION IN ORDER TO TAKE OFF IMAGE WITH UNSEEN CLASSES FOR TRAINING
-    # all classes
+    # keep empty
     parser.add_argument('--unseen_classes_idx', type=int, default=[])  # not used
 
     class_names = [
@@ -809,22 +761,15 @@ def main():
     parser.add_argument('--context_GCN_aware', type=bool, default=True)
     parser.add_argument('--GCN_avg_feat', action='store_true', help='whether using avg feat for GCN')
     parser.add_argument('--GCN_weight', type=float, default=0.1, help='GCN context weight')
-    parser.add_argument('--checkname', type=str,
-                        default='gmmn_context_w2c300_linear_weighted100_hs256_2_unseen_withGCNcontext_w0_1')
 
-    parser.add_argument('--imagenet_pretrained_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/imagenet_training/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar',
-                        help='set the checkpoint name')
+    parser.add_argument('--exp_path', type=str, default='run')
 
-    parser.add_argument('--exp_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run',
-                        help='set the checkpoint name')
+    parser.add_argument('--imagenet_pretrained_path', type=str, default='checkpoint/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar')
 
-    # checking point
-    parser.add_argument('--resume', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run/context/context_2_unseen/experiment_0/200_model.pth.tar',
+    parser.add_argument('--resume', type=str, default='checkpoint/deeplab_pretrained_pascal_context_02_unseen.pth.tar',
                         help='put the path to resuming file if needed')
 
+    parser.add_argument('--checkname', type=str, default='gmmn_context_w2c300_linear_weighted100_hs256_2_unseen_withGCNcontext_w0_1')
 
     args = parser.parse_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()

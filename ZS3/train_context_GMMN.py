@@ -2,18 +2,17 @@ import argparse
 import os
 import numpy as np
 from tqdm import tqdm
-
-from ZS3.mypath import Path
+import torch
+from torch import nn
 from ZS3.dataloaders import make_data_loader
 from ZS3.modeling.sync_batchnorm.replicate import patch_replication_callback
-from ZS3.modeling.deeplab import *
+from ZS3.modeling.deeplab import DeepLab
 from ZS3.utils.loss import SegmentationLosses, GMMNLoss
-from ZS3.utils.calculate_weights import calculate_weigths_labels
 from ZS3.utils.lr_scheduler import LR_Scheduler
 from ZS3.utils.saver import Saver
 from ZS3.utils.summaries import TensorboardSummary
 from ZS3.utils.metrics import Evaluator
-from ZS3.modeling.gmmn import *
+from ZS3.modeling.gmmn import GMMNnetwork
 
 class Trainer(object):
     def __init__(self, args):
@@ -435,18 +434,15 @@ def main():
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
     # checking point
-    parser.add_argument('--resume', type=str, default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run/context/context_10_unseen/experiment_0/200_model.pth.tar', help='put the path to resuming file if needed')
 
-    parser.add_argument('--checkname', type=str, default='gmmn_context_w2c300_linear_weighted100_hs256_10_unseen')
+    parser.add_argument('--imagenet_pretrained_path', type=str, default='checkpoint/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar')
 
-    parser.add_argument('--imagenet_pretrained_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/imagenet_training/imagenet_pretrain_wo_pascalcontext_checkpoint.pth.tar',
-                        help='set the checkpoint name')
+    parser.add_argument('--resume', type=str, default='checkpoint/deeplab_pretrained_pascal_context_02_unseen.pth.tar', help='put the path to resuming file if needed')
+
+    parser.add_argument('--checkname', type=str, default='gmmn_context_w2c300_linear_weighted100_hs256_2_unseen')
 
 
-    parser.add_argument('--exp_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run',
-                        help='set the checkpoint name')
+    parser.add_argument('--exp_path', type=str, default='run')
 
     # false if embedding resume
     parser.add_argument('--global_avg_pool_bn', type=bool, default=True)
@@ -460,11 +456,8 @@ def main():
     parser.add_argument('--no-val', action='store_true', default=False,
                         help='skip validation during training')
 
-    ### FOR IMAGE SELECTION IN ORDER TO TAKE OFF IMAGE WITH UNSEEN CLASSES FOR TRAINING
-    # all classes
+    # keep empty
     parser.add_argument('--unseen_classes_idx', type=int, default=[])
-    # only seen classes
-    #parser.add_argument('--unseen_classes_idx', type=int, default=[10, 14, 16])
 
     class_names = [
         'background',  # class 0
@@ -529,8 +522,9 @@ def main():
         'wood'  # class 59
     ]
 
+
     # 2 unseen
-    #unseen_names = ['cow', 'motorbike']
+    unseen_names = ['cow', 'motorbike']
     # 4 unseen
     #unseen_names = ['cow', 'motorbike', 'sofa', 'cat']
     # 6 unseen
@@ -538,7 +532,7 @@ def main():
     # 8 unseen
     #unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor']
     # 10 unseen
-    unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor', 'aeroplane', 'keyboard']
+    #unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor', 'aeroplane', 'keyboard']
 
     unseen_classes_idx_metric = []
     for name in unseen_names:
