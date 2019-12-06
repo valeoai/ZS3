@@ -124,7 +124,7 @@ train_pascal_GMMN.py
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
 
-* Final deeplabv3+
+* Final deeplabv3+ and GMMN
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_02_unseen_GMMN_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_04_unseen_GMMN_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/v0.1/deeplab_pascal_voc_06_unseen_GMMN_final.pth.tar)
@@ -168,7 +168,7 @@ train_context_GMMN.py
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
     
-* Final deeplabv3+
+* Final deeplabv3+ and GMMN
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_final.pth.tar)
@@ -189,7 +189,7 @@ train_context_GMMN_GCNcontext.py
     - `seen_classes_idx_metric`: List of idx of seen classes.
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
     
-* Final deeplabv3+
+* Final deeplabv3+ and GMMN with graph context
     -  [2 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_02_unseen_GMMN_GC_final.pth.tar)
     -  [4 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_04_unseen_GMMN_GC_final.pth.tar)
     -  [6 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_06_unseen_GMMN_GC_final.pth.tar)
