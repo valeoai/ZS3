@@ -111,7 +111,7 @@ train_pascal.py
 
 
 
-2. Train GMMN and finetune the last classication layer:
+2. Train GMMN and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
 train_pascal_GMMN.py
@@ -155,7 +155,7 @@ train_context.py
 
 
 
-2. Train GMMN and finetune the last classication layer of a trained deeplabv3+ model:
+2. Train GMMN and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
 train_context_GMMN.py
@@ -176,7 +176,7 @@ train_context_GMMN.py
     -  [10 unseen classes](https://github.com/valeoai/ZS3/releases/download/0.2/deeplab_pascal_context_10_unseen_GMMN_final.pth.tar)
 
 
-2 (bis). Train GMMN with graph context and finetune the last classication layer of a trained deeplabv3+ model:
+2 (bis). Train GMMN with graph context and finetune the last classification layer of the trained deeplabv3+ model:
 
 ```Shell
 train_context_GMMN_GCNcontext.py
