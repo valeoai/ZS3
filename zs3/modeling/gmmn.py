@@ -12,7 +12,7 @@ class GMMNnetwork(nn.Module):
         feature_dim,
         semantic_reconstruction=False,
     ):
-        super(GMMNnetwork, self).__init__()
+        super().__init__()
 
         def block(in_feat, out_feat):
             layers = [nn.Linear(in_feat, out_feat)]
@@ -51,7 +51,7 @@ class GMMNnetwork(nn.Module):
 
 class GMMNnetwork_GCN(nn.Module):
     def __init__(self, noise_dim=300, embed_dim=300, hidden_size=256, feature_dim=256):
-        super(GMMNnetwork_GCN, self).__init__()
+        super().__init__()
         self.gcn1 = GraphConvolution(noise_dim + embed_dim, hidden_size)
         self.relu = nn.LeakyReLU(0.2)
         self.dropout = nn.Dropout(p=0.5)

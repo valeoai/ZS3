@@ -11,7 +11,7 @@
 import math
 
 
-class LR_Scheduler(object):
+class LR_Scheduler:
     """Learning Rate Scheduler
 
     Step mode: ``lr = baselr * 0.1 ^ {floor(epoch-1 / lr_step)}``
@@ -33,7 +33,7 @@ class LR_Scheduler(object):
         self, mode, base_lr, num_epochs, iters_per_epoch=0, lr_step=0, warmup_epochs=0
     ):
         self.mode = mode
-        print("Using {} LR Scheduler!".format(self.mode))
+        print(f"Using {self.mode} LR Scheduler!")
         self.lr = base_lr
         if mode == "step":
             assert lr_step

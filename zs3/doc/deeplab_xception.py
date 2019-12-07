@@ -14,7 +14,7 @@ class SeparableConv2d(nn.Module):
     def __init__(
         self, inplanes, planes, kernel_size=3, stride=1, padding=0, dilation=1, bias=False
     ):
-        super(SeparableConv2d, self)._init_()
+        super()._init_()
 
         self.conv1 = nn.Conv2d(
             inplanes,
@@ -45,7 +45,7 @@ def fixed_padding(inputs, kernel_size, dilation):
 
 class SeparableConv2d_same(nn.Module):
     def __init__(self, inplanes, planes, kernel_size=3, stride=1, dilation=1, bias=False):
-        super(SeparableConv2d_same, self).__init__()
+        super().__init__()
 
         self.conv1 = nn.Conv2d(
             inplanes,
@@ -78,7 +78,7 @@ class Block(nn.Module):
         grow_first=True,
         is_last=False,
     ):
-        super(Block, self).__init__()
+        super().__init__()
 
         if planes != inplanes or stride != 1:
             self.skip = nn.Conv2d(inplanes, planes, 1, stride=stride, bias=False)
@@ -143,7 +143,7 @@ class Xception(nn.Module):
     """
 
     def __init__(self, inplanes=3, os=16, pretrained=False):
-        super(Xception, self).__init__()
+        super().__init__()
 
         if os == 16:
             entry_block3_stride = 2
@@ -454,7 +454,7 @@ class Xception(nn.Module):
 
 class ASPP_module(nn.Module):
     def __init__(self, inplanes, planes, dilation):
-        super(ASPP_module, self).__init__()
+        super().__init__()
         if dilation == 1:
             kernel_size = 1
             padding = 0
@@ -504,10 +504,10 @@ class DeepLabv3_plus(nn.Module):
         if _print:
             print("Constructing DeepLabv3+ model...")
             print("Backbone: Xception")
-            print("Number of classes: {}".format(n_classes))
-            print("Output stride: {}".format(os))
-            print("Number of Input Channels: {}".format(nInputChannels))
-        super(DeepLabv3_plus, self).__init__()
+            print(f"Number of classes: {n_classes}")
+            print(f"Output stride: {os}")
+            print(f"Number of Input Channels: {nInputChannels}")
+        super().__init__()
 
         # Atrous Conv
         self.xception_features = Xception(nInputChannels, os, pretrained)

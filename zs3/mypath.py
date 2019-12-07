@@ -1,4 +1,4 @@
-class Path(object):
+class Path:
     @staticmethod
     def db_root_dir(dataset):
         if dataset == "pascal":
@@ -8,5 +8,5 @@ class Path(object):
         elif dataset == "context":
             return "data/context/"
         else:
-            print("Dataset {} not available.".format(dataset))
+            print(f"Dataset {dataset} not available.")
             raise NotImplementedError

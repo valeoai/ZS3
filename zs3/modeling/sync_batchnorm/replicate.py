@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # File   : replicate.py
 # Author : Jiayuan Mao
 # Email  : maojiayuan@gmail.com
@@ -20,7 +19,7 @@ __all__ = [
 ]
 
 
-class CallbackContext(object):
+class CallbackContext:
     pass
 
 
@@ -57,7 +56,7 @@ class DataParallelWithCallback(DataParallel):
     """
 
     def replicate(self, module, device_ids):
-        modules = super(DataParallelWithCallback, self).replicate(module, device_ids)
+        modules = super().replicate(module, device_ids)
         execute_replication_callbacks(modules)
         return modules
 

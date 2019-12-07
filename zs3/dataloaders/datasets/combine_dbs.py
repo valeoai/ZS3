@@ -35,7 +35,7 @@ class CombineDBs(data.Dataset):
                     self.cat_list.append({"db_ii": ii, "cat_ii": jj})
 
         self.im_ids = new_im_ids
-        print("Combined number of images: {:d}".format(num_images))
+        print(f"Combined number of images: {num_images:d}")
 
     def __getitem__(self, index):
 

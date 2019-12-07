@@ -10,7 +10,7 @@ from zs3.modeling.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 
 class DeepLabNonLinearClassifier(nn.Module):
     def __init__(self, args, num_classes, global_avg_pool_bn=True):
-        super(DeepLabNonLinearClassifier, self).__init__()
+        super().__init__()
 
         self.deeplab = DeepLab(
             num_classes=num_classes,
@@ -56,7 +56,7 @@ class DeepLab(nn.Module):
         global_avg_pool_bn=True,
         imagenet_pretrained_path="",
     ):
-        super(DeepLab, self).__init__()
+        super().__init__()
         if backbone == "drn":
             output_stride = 8
 
@@ -165,7 +165,7 @@ class DeepLabEmbedding(nn.Module):
         pretrained=True,
         global_avg_pool_bn=False,
     ):
-        super(DeepLabEmbedding, self).__init__()
+        super().__init__()
         if backbone == "drn":
             output_stride = 8
 

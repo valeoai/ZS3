@@ -5,7 +5,7 @@ import torch.nn as nn
 
 class EntropyLoss(nn.Module):
     def __init__(self, weight=None, hardneg=False, hardnegPer=-1):
-        super(EntropyLoss, self).__init__()
+        super().__init__()
         self.weight = weight
         self.hardneg = hardneg
         if self.hardneg:
@@ -42,7 +42,7 @@ class EntropyLoss(nn.Module):
 
 class EntropyLossOnlySeen(nn.Module):
     def __init__(self):
-        super(EntropyLossOnlySeen, self).__init__()
+        super().__init__()
 
     def forward(self, v):
         """

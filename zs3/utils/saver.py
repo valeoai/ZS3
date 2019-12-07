@@ -6,7 +6,7 @@ from collections import OrderedDict
 import torch
 
 
-class Saver(object):
+class Saver:
     def __init__(self, args):
         self.args = args
         self.directory = os.path.join(self.args.exp_path, args.dataset, args.checkname)

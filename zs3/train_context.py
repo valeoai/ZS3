@@ -17,7 +17,7 @@ from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
 
 
-class Trainer(object):
+class Trainer:
     def __init__(self, args):
         self.args = args
 
@@ -98,7 +98,7 @@ class Trainer(object):
         self.best_pred = 0.0
         if args.resume is not None:
             if not os.path.isfile(args.resume):
-                raise RuntimeError("=> no checkpoint found at '{}'".format(args.resume))
+                raise RuntimeError(f"=> no checkpoint found at '{args.resume}'")
             checkpoint = torch.load(args.resume)
             args.start_epoch = checkpoint["epoch"]
             if args.cuda:
@@ -266,7 +266,7 @@ class Trainer(object):
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
         print(
-            "Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(Acc, Acc_class, mIoU, FWIoU)
+            f"Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
         )
         print("Loss: %.3f" % test_loss)
 
