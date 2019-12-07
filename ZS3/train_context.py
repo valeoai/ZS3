@@ -318,15 +318,15 @@ def main():
     # checking point
     parser.add_argument('--resume', type=str, default=None,
                         help='put the path to resuming file if needed')
-    parser.add_argument('--checkname', type=str, default='context_10_unseen',
+    parser.add_argument('--checkname', type=str, default='context_2_unseen',
                         help='set the checkpoint name')
 
     parser.add_argument('--imagenet_pretrained_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/imagenet_training/imagenet_pretrain_wo_pascalcontext_checkpoint.pth.tar',
+                        default='checkpoint/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar',
                         help='set the checkpoint name')
 
     parser.add_argument('--exp_path', type=str,
-                        default='/home/docker_user/workspace/zero-shot_object_detection/zs3/run',
+                        default='run',
                         help='set the checkpoint name')
 
     # finetuning pre-trained models
@@ -403,7 +403,7 @@ def main():
 
 
     # 2 unseen
-    #unseen_names = ['cow', 'motorbike']
+    unseen_names = ['cow', 'motorbike']
     # 4 unseen
     #unseen_names = ['cow', 'motorbike', 'sofa', 'cat']
     # 6 unseen
@@ -411,7 +411,7 @@ def main():
     # 8 unseen
     #unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor']
     # 10 unseen
-    unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor', 'aeroplane', 'keyboard']
+    #unseen_names = ['cow', 'motorbike', 'sofa', 'cat', 'boat', 'fence', 'bird', 'tvmonitor', 'aeroplane', 'keyboard']
 
     unseen_classes_idx = []
     for name in unseen_names:
