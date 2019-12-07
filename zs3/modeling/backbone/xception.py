@@ -27,7 +27,7 @@ class SeparableConv2d(nn.Module):
         bias=False,
         BatchNorm=None,
     ):
-        super(SeparableConv2d, self).__init__()
+        super().__init__()
 
         self.conv1 = nn.Conv2d(
             inplanes,
@@ -63,7 +63,7 @@ class Block(nn.Module):
         grow_first=True,
         is_last=False,
     ):
-        super(Block, self).__init__()
+        super().__init__()
 
         if planes != inplanes or stride != 1:
             self.skip = nn.Conv2d(inplanes, planes, 1, stride=stride, bias=False)
@@ -132,7 +132,7 @@ class AlignedXception(nn.Module):
     """
 
     def __init__(self, output_stride, BatchNorm, pretrained=True):
-        super(AlignedXception, self).__init__()
+        super().__init__()
 
         if output_stride == 16:
             entry_block3_stride = 2

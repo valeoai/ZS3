@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # File   : comm.py
 # Author : Jiayuan Mao
 # Email  : maojiayuan@gmail.com
@@ -15,7 +14,7 @@ import threading
 __all__ = ["FutureResult", "SlavePipe", "SyncMaster"]
 
 
-class FutureResult(object):
+class FutureResult:
     """A thread-safe future implementation. Used only as one-to-one pipe."""
 
     def __init__(self):
@@ -55,7 +54,7 @@ class SlavePipe(_SlavePipeBase):
         return ret
 
 
-class SyncMaster(object):
+class SyncMaster:
     """An abstract `SyncMaster` object.
     - During the replication, as the data parallel will trigger an callback of each module, all slave devices should
     call `register(id)` and obtain an `SlavePipe` to communicate with the master.

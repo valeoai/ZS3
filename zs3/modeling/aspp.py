@@ -7,7 +7,7 @@ from zs3.modeling.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 
 class _ASPPModule(nn.Module):
     def __init__(self, inplanes, planes, kernel_size, padding, dilation, BatchNorm):
-        super(_ASPPModule, self).__init__()
+        super().__init__()
         self.atrous_conv = nn.Conv2d(
             inplanes,
             planes,
@@ -42,7 +42,7 @@ class _ASPPModule(nn.Module):
 
 class ASPP(nn.Module):
     def __init__(self, backbone, output_stride, BatchNorm, global_avg_pool_bn=True):
-        super(ASPP, self).__init__()
+        super().__init__()
         if backbone == "drn":
             inplanes = 512
         elif backbone == "mobilenet":

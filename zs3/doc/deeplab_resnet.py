@@ -14,7 +14,7 @@ class Bottleneck(nn.Module):
     expansion = 4
 
     def __init__(self, inplanes, planes, stride=1, dilation=1, downsample=None):
-        super(Bottleneck, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = BatchNorm2d(planes)
         self.conv2 = nn.Conv2d(
@@ -60,7 +60,7 @@ class Bottleneck(nn.Module):
 class ResNet(nn.Module):
     def __init__(self, nInputChannels, block, layers, os=16, pretrained=False):
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        super().__init__()
         if os == 16:
             strides = [1, 2, 2, 1]
             dilations = [1, 1, 1, 2]
@@ -194,7 +194,7 @@ def ResNet101(nInputChannels=3, os=16, pretrained=False):
 
 class ASPP_module(nn.Module):
     def __init__(self, inplanes, planes, dilation):
-        super(ASPP_module, self).__init__()
+        super().__init__()
         if dilation == 1:
             kernel_size = 1
             padding = 0
@@ -244,10 +244,10 @@ class DeepLabv3_plus(nn.Module):
         if _print:
             print("Constructing DeepLabv3+ model...")
             print("Backbone: Resnet-101")
-            print("Number of classes: {}".format(n_classes))
-            print("Output stride: {}".format(os))
-            print("Number of Input Channels: {}".format(nInputChannels))
-        super(DeepLabv3_plus, self).__init__()
+            print(f"Number of classes: {n_classes}")
+            print(f"Output stride: {os}")
+            print(f"Number of Input Channels: {nInputChannels}")
+        super().__init__()
 
         # Atrous Conv
         self.resnet_features = ResNet101(nInputChannels, os, pretrained=pretrained)

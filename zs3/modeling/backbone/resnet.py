@@ -11,7 +11,7 @@ class Bottleneck(nn.Module):
     def __init__(
         self, inplanes, planes, stride=1, dilation=1, downsample=None, BatchNorm=None
     ):
-        super(Bottleneck, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = BatchNorm(planes)
         self.conv2 = nn.Conv2d(
@@ -65,7 +65,7 @@ class ResNet(nn.Module):
         imagenet_pretrained_path="",
     ):
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        super().__init__()
         blocks = [1, 2, 4]
         if output_stride == 16:
             strides = [1, 2, 2, 1]

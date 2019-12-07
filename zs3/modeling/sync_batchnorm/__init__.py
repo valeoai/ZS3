@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # File   : __init__.py
 # Author : Jiayuan Mao
 # Email  : maojiayuan@gmail.com

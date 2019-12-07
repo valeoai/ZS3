@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # File   : batchnorm.py
 # Author : Jiayuan Mao
 # Email  : maojiayuan@gmail.com
@@ -40,7 +39,7 @@ _MasterMessage = collections.namedtuple("_MasterMessage", ["sum", "inv_std"])
 
 class _SynchronizedBatchNorm(_BatchNorm):
     def __init__(self, num_features, eps=1e-5, momentum=0.1, affine=True):
-        super(_SynchronizedBatchNorm, self).__init__(
+        super().__init__(
             num_features, eps=eps, momentum=momentum, affine=affine
         )
 
@@ -199,7 +198,7 @@ class SynchronizedBatchNorm1d(_SynchronizedBatchNorm):
             raise ValueError(
                 "expected 2D or 3D input (got {}D input)".format(input.dim())
             )
-        super(SynchronizedBatchNorm1d, self)._check_input_dim(input)
+        super()._check_input_dim(input)
 
 
 class SynchronizedBatchNorm2d(_SynchronizedBatchNorm):
@@ -250,7 +249,7 @@ class SynchronizedBatchNorm2d(_SynchronizedBatchNorm):
     def _check_input_dim(self, input):
         if input.dim() != 4:
             raise ValueError("expected 4D input (got {}D input)".format(input.dim()))
-        super(SynchronizedBatchNorm2d, self)._check_input_dim(input)
+        super()._check_input_dim(input)
 
 
 class SynchronizedBatchNorm3d(_SynchronizedBatchNorm):
@@ -302,4 +301,4 @@ class SynchronizedBatchNorm3d(_SynchronizedBatchNorm):
     def _check_input_dim(self, input):
         if input.dim() != 5:
             raise ValueError("expected 5D input (got {}D input)".format(input.dim()))
-        super(SynchronizedBatchNorm3d, self)._check_input_dim(input)
+        super()._check_input_dim(input)

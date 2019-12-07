@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class SegmentationLosses(object):
+class SegmentationLosses:
     def __init__(
         self,
         weight=None,
@@ -111,7 +111,7 @@ def EntropyLossMasked(v, mask):
     return -torch.sum(torch.mul(v_soft, torch.log2(v_soft + 1e-30))) / (n * np.log2(c))
 
 
-class GMMNLoss(object):
+class GMMNLoss:
     def __init__(self, sigma=[2, 5, 10, 20, 40, 80], cuda=False):
         self.sigma = sigma
         self.cuda = cuda
@@ -145,7 +145,7 @@ class GMMNLoss(object):
         return loss
 
 
-class MSELoss(object):
+class MSELoss:
     def build_loss(self):
         return self.mse_loss
 
@@ -172,7 +172,7 @@ class MSELoss(object):
         return loss
 
 
-class MSELoss_bis(object):
+class MSELoss_bis:
     def build_loss(self):
         return self.mse_loss
 
@@ -199,7 +199,7 @@ class MSELoss_bis(object):
         return loss
 
 
-class CosineLoss(object):
+class CosineLoss:
     def build_loss(self):
         return self.cosine_loss
 
@@ -233,7 +233,7 @@ class CosineLoss(object):
         return loss
 
 
-class CosineLoss_bis(object):
+class CosineLoss_bis:
     def build_loss(self):
         return self.cosine_loss
 

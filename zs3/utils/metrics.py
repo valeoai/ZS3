@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Evaluator(object):
+class Evaluator:
     def __init__(self, num_class, seen_classes_idx=None, unseen_classes_idx=None):
         self.num_class = num_class
         self.seen_classes_idx = seen_classes_idx
@@ -85,7 +85,7 @@ class Evaluator(object):
         self.confusion_matrix = np.zeros((self.num_class,) * 2)
 
 
-class Evaluator_seen_unseen(object):
+class Evaluator_seen_unseen:
     def __init__(self, num_class, unseen_classes_idx):
         self.num_class = num_class
         self.unseen_classes_idx = unseen_classes_idx

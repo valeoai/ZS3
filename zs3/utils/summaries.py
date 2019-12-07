@@ -7,7 +7,7 @@ from torchvision.utils import make_grid
 from zs3.dataloaders.utils import decode_seg_map_sequence
 
 
-class TensorboardSummary(object):
+class TensorboardSummary:
     def __init__(self, directory):
         self.directory = directory
 

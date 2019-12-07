@@ -5,7 +5,7 @@ import torch
 from PIL import Image, ImageOps, ImageFilter
 
 
-class Normalize(object):
+class Normalize:
     """Normalize a tensor image with mean and standard deviation.
     Args:
         mean (tuple): means for each channel.
@@ -28,7 +28,7 @@ class Normalize(object):
         return {"image": img, "label": mask}
 
 
-class ToTensor(object):
+class ToTensor:
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):
@@ -46,7 +46,7 @@ class ToTensor(object):
         return {"image": img, "label": mask}
 
 
-class RandomHorizontalFlip(object):
+class RandomHorizontalFlip:
     def __call__(self, sample):
         img = sample["image"]
         mask = sample["label"]
@@ -57,7 +57,7 @@ class RandomHorizontalFlip(object):
         return {"image": img, "label": mask}
 
 
-class RandomRotate(object):
+class RandomRotate:
     def __init__(self, degree):
         self.degree = degree
 
@@ -71,7 +71,7 @@ class RandomRotate(object):
         return {"image": img, "label": mask}
 
 
-class RandomGaussianBlur(object):
+class RandomGaussianBlur:
     def __call__(self, sample):
         img = sample["image"]
         mask = sample["label"]
@@ -81,7 +81,7 @@ class RandomGaussianBlur(object):
         return {"image": img, "label": mask}
 
 
-class RandomScaleCrop(object):
+class RandomScaleCrop:
     def __init__(self, base_size, crop_size, fill=255):
         self.base_size = base_size
         self.crop_size = crop_size
@@ -117,7 +117,7 @@ class RandomScaleCrop(object):
         return {"image": img, "label": mask}
 
 
-class FixScaleCrop(object):
+class FixScaleCrop:
     def __init__(self, crop_size):
         self.crop_size = crop_size
 
@@ -143,7 +143,7 @@ class FixScaleCrop(object):
         return {"image": img, "label": mask}
 
 
-class FixScale(object):
+class FixScale:
     def __init__(self, crop_size):
         self.crop_size = crop_size
 
@@ -163,7 +163,7 @@ class FixScale(object):
         return {"image": img, "label": mask}
 
 
-class FixedResize(object):
+class FixedResize:
     def __init__(self, size):
         self.size = (size, size)  # size: (h, w)
 

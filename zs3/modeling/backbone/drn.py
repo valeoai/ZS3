@@ -44,7 +44,7 @@ class BasicBlock(nn.Module):
         residual=True,
         BatchNorm=None,
     ):
-        super(BasicBlock, self).__init__()
+        super().__init__()
         self.conv1 = conv3x3(
             inplanes, planes, stride, padding=dilation[0], dilation=dilation[0]
         )
@@ -88,7 +88,7 @@ class Bottleneck(nn.Module):
         residual=True,
         BatchNorm=None,
     ):
-        super(Bottleneck, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(inplanes, planes, kernel_size=1, bias=False)
         self.bn1 = BatchNorm(planes)
         self.conv2 = nn.Conv2d(
@@ -139,7 +139,7 @@ class DRN(nn.Module):
         channels=(16, 32, 64, 128, 256, 512, 512, 512),
         BatchNorm=None,
     ):
-        super(DRN, self).__init__()
+        super().__init__()
         self.inplanes = channels[0]
         self.out_dim = channels[-1]
         self.arch = arch
@@ -362,7 +362,7 @@ class DRN(nn.Module):
 class DRN_A(nn.Module):
     def __init__(self, block, layers, BatchNorm=None):
         self.inplanes = 64
-        super(DRN_A, self).__init__()
+        super().__init__()
         self.out_dim = 512 * block.expansion
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = BatchNorm(64)

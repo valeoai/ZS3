@@ -23,7 +23,7 @@ def map_label(label, classes):
     return mapped_label
 
 
-class Logger(object):
+class Logger:
     def __init__(self, filename):
         self.filename = filename
         f = open(self.filename + ".log", "a")
@@ -35,7 +35,7 @@ class Logger(object):
         f.close()
 
 
-class DATA_LOADER(object):
+class DATA_LOADER:
     def __init__(self, opt):
         if opt.matdataset:
             if opt.dataset == "imageNet1K":

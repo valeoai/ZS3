@@ -1,7 +1,7 @@
 import torch
 
 
-class GMMNLoss(object):
+class GMMNLoss:
     def __init__(self, sigma=[2, 5, 10, 20, 40, 80], cuda=False):
         self.sigma = sigma
         self.cuda = cuda

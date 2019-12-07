@@ -142,7 +142,7 @@ class CLASSIFIER:
 
 class LINEAR_LOGSOFTMAX(nn.Module):
     def __init__(self, input_dim, nclass):
-        super(LINEAR_LOGSOFTMAX, self).__init__()
+        super().__init__()
         self.fc = nn.Linear(input_dim, nclass)
         self.logic = nn.LogSoftmax(dim=1)
 
