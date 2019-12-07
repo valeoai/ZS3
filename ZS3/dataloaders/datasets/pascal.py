@@ -87,8 +87,8 @@ class VOCSegmentation(Dataset):
         for ii, line in enumerate(lines):
             _image = os.path.join(self._image_dir, line + ".jpg")
             _cat = os.path.join(self._cat_dir, line + ".png")
-            assert os.path.isfile(_image)
-            assert os.path.isfile(_cat)
+            assert os.path.isfile(_image), _image
+            assert os.path.isfile(_cat), _cat
 
             # if unseen classes and training split
             if len(args.unseen_classes_idx) > 0 and self.split == 'train':
