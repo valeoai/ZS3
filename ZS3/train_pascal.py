@@ -118,6 +118,10 @@ class Trainer(object):
                     global_step = i + num_img_tr * epoch
                     self.summary.visualize_image(self.writer, self.args.dataset, image, target, output, global_step)
 
+            if os.environ.get('DRY_RUN', '0') == '1' and i == 1:
+                print('Done, breaking now.')
+                break
+
         self.writer.add_scalar('train/total_loss_epoch', train_loss, epoch)
         print('[Epoch: %d, numImages: %5d]' % (epoch, i * self.args.batch_size + image.data.shape[0]))
         print('Loss: %.3f' % train_loss)
@@ -175,6 +179,10 @@ class Trainer(object):
             pred = np.argmax(pred, axis=1)
             # Add batch sample into evaluator
             self.evaluator.add_batch(target, pred)
+
+            if os.environ.get('DRY_RUN', '0') == '1' and i == 1:
+                print('Done, breaking now.')
+                break
 
         # Fast test during the training
         Acc = self.evaluator.Pixel_Accuracy()
@@ -358,6 +366,10 @@ def main():
         trainer.training(epoch)
         if not trainer.args.no_val and epoch % args.eval_interval == (args.eval_interval - 1):
             trainer.validation(epoch)
+
+        if os.environ.get('DRY_RUN', '0') == '1' and epoch == 11:
+            print('Done, breaking now.')
+            break
     trainer.writer.close()
 
 
