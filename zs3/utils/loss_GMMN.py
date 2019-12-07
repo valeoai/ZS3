@@ -2,7 +2,6 @@ import torch
 
 
 class GMMNLoss(object):
-
     def __init__(self, sigma=[2, 5, 10, 20, 40, 80], cuda=False):
         self.sigma = sigma
         self.cuda = cuda
@@ -10,10 +9,9 @@ class GMMNLoss(object):
     def build_loss(self):
         return self.moment_loss
 
-
     def get_scale_matrix(self, M, N):
-        s1 = (torch.ones((N, 1)) * 1.0 / N)
-        s2 = (torch.ones((M, 1)) * -1.0 / M)
+        s1 = torch.ones((N, 1)) * 1.0 / N
+        s2 = torch.ones((M, 1)) * -1.0 / M
         if self.cuda:
             s1, s2 = s1.cuda(), s2.cuda()
         return torch.cat((s1, s2), 0)

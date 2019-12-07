@@ -7,8 +7,19 @@ from torch.autograd import Variable
 
 class CLASSIFIER:
     # train_Y is interger
-    def __init__(self, _train_X, _train_Y, _nclass, _input_dim, _cuda, _lr=0.001, _beta1=0.5, _nepoch=20,
-                 _batch_size=100, pretrain_classifer=''):
+    def __init__(
+        self,
+        _train_X,
+        _train_Y,
+        _nclass,
+        _input_dim,
+        _cuda,
+        _lr=0.001,
+        _beta1=0.5,
+        _nepoch=20,
+        _batch_size=100,
+        pretrain_classifer="",
+    ):
         self.train_X = _train_X
         self.train_Y = _train_Y
         self.batch_size = _batch_size
@@ -26,7 +37,9 @@ class CLASSIFIER:
         self.lr = _lr
         self.beta1 = _beta1
         # setup optimizer
-        self.optimizer = optim.Adam(self.model.parameters(), lr=_lr, betas=(_beta1, 0.999))
+        self.optimizer = optim.Adam(
+            self.model.parameters(), lr=_lr, betas=(_beta1, 0.999)
+        )
 
         if self.cuda:
             self.model.cuda()
@@ -38,7 +51,7 @@ class CLASSIFIER:
         self.epochs_completed = 0
         self.ntrain = self.train_X.size()[0]
 
-        if pretrain_classifer == '':
+        if pretrain_classifer == "":
             self.fit()
         else:
             self.model.load_state_dict(torch.load(pretrain_classifier))
@@ -70,8 +83,8 @@ class CLASSIFIER:
             self.epochs_completed += 1
             rest_num_examples = self.ntrain - start
             if rest_num_examples > 0:
-                X_rest_part = self.train_X[start:self.ntrain]
-                Y_rest_part = self.train_Y[start:self.ntrain]
+                X_rest_part = self.train_X[start : self.ntrain]
+                Y_rest_part = self.train_Y[start : self.ntrain]
             # shuffle the data
             perm = torch.randperm(self.ntrain)
             self.train_X = self.train_X[perm]
@@ -83,7 +96,10 @@ class CLASSIFIER:
             X_new_part = self.train_X[start:end]
             Y_new_part = self.train_Y[start:end]
             if rest_num_examples > 0:
-                return torch.cat((X_rest_part, X_new_part), 0), torch.cat((Y_rest_part, Y_new_part), 0)
+                return (
+                    torch.cat((X_rest_part, X_new_part), 0),
+                    torch.cat((Y_rest_part, Y_new_part), 0),
+                )
             else:
                 return X_new_part, Y_new_part
         else:
@@ -107,15 +123,20 @@ class CLASSIFIER:
             _, predicted_label[start:end] = torch.max(output.data, 1)
             start = end
 
-        acc = self.compute_per_class_acc(util.map_label(test_label, target_classes), predicted_label,
-                                         target_classes.size(0))
+        acc = self.compute_per_class_acc(
+            util.map_label(test_label, target_classes),
+            predicted_label,
+            target_classes.size(0),
+        )
         return acc
 
     def compute_per_class_acc(self, test_label, predicted_label, nclass):
         acc_per_class = torch.FloatTensor(nclass).fill_(0)
         for i in range(nclass):
-            idx = (test_label == i)
-            acc_per_class[i] = torch.sum(test_label[idx] == predicted_label[idx]) / torch.sum(idx)
+            idx = test_label == i
+            acc_per_class[i] = torch.sum(
+                test_label[idx] == predicted_label[idx]
+            ) / torch.sum(idx)
         return acc_per_class.mean()
 
 

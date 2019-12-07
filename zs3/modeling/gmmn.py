@@ -4,7 +4,14 @@ from torch import nn
 
 
 class GMMNnetwork(nn.Module):
-    def __init__(self, noise_dim, embed_dim, hidden_size, feature_dim, semantic_reconstruction=False):
+    def __init__(
+        self,
+        noise_dim,
+        embed_dim,
+        hidden_size,
+        feature_dim,
+        semantic_reconstruction=False,
+    ):
         super(GMMNnetwork, self).__init__()
 
         def block(in_feat, out_feat):
@@ -17,18 +24,21 @@ class GMMNnetwork(nn.Module):
             if type(m) == nn.Linear:
                 torch.nn.init.xavier_uniform_(m.weight)
                 m.bias.data.fill_(0.01)
+
         if hidden_size:
             self.model = nn.Sequential(
                 *block(noise_dim + embed_dim, hidden_size),
-                nn.Linear(hidden_size, feature_dim))
+                nn.Linear(hidden_size, feature_dim),
+            )
         else:
             self.model = nn.Linear(noise_dim + embed_dim, feature_dim)
 
         self.model.apply(init_weights)
         self.semantic_reconstruction = semantic_reconstruction
         if self.semantic_reconstruction:
-            self.semantic_reconstruction_layer = nn.Linear(feature_dim, noise_dim + embed_dim)
-
+            self.semantic_reconstruction_layer = nn.Linear(
+                feature_dim, noise_dim + embed_dim
+            )
 
     def forward(self, embd, noise):
         features = self.model(torch.cat((embd, noise), 1))
@@ -40,10 +50,7 @@ class GMMNnetwork(nn.Module):
 
 
 class GMMNnetwork_GCN(nn.Module):
-    def __init__(self,  noise_dim = 300,
-                        embed_dim = 300,
-                        hidden_size = 256,
-                        feature_dim = 256):
+    def __init__(self, noise_dim=300, embed_dim=300, hidden_size=256, feature_dim=256):
         super(GMMNnetwork_GCN, self).__init__()
         self.gcn1 = GraphConvolution(noise_dim + embed_dim, hidden_size)
         self.relu = nn.LeakyReLU(0.2)

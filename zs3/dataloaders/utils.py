@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-def decode_seg_map_sequence(label_masks, dataset='pascal'):
+
+def decode_seg_map_sequence(label_masks, dataset="pascal"):
     rgb_masks = []
     for label_mask in label_masks:
         rgb_mask = decode_segmap(label_mask, dataset)
@@ -21,10 +22,10 @@ def decode_segmap(label_mask, dataset, plot=False):
     Returns:
         (np.ndarray, optional): the resulting decoded color image.
     """
-    if dataset == 'pascal':
+    if dataset == "pascal":
         n_classes = 21
         label_colours = get_pascal_labels()
-    elif dataset == 'context':
+    elif dataset == "context":
         n_classes = 60
         label_colours = make_palette(n_classes)
     else:
@@ -70,12 +71,32 @@ def get_pascal_labels():
     Returns:
         np.ndarray with dimensions (21, 3)
     """
-    return np.asarray([[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0],
-                       [0, 0, 128], [128, 0, 128], [0, 128, 128], [128, 128, 128],
-                       [64, 0, 0], [192, 0, 0], [64, 128, 0], [192, 128, 0],
-                       [64, 0, 128], [192, 0, 128], [64, 128, 128], [192, 128, 128],
-                       [0, 64, 0], [128, 64, 0], [0, 192, 0], [128, 192, 0],
-                       [0, 64, 128]])
+    return np.asarray(
+        [
+            [0, 0, 0],
+            [128, 0, 0],
+            [0, 128, 0],
+            [128, 128, 0],
+            [0, 0, 128],
+            [128, 0, 128],
+            [0, 128, 128],
+            [128, 128, 128],
+            [64, 0, 0],
+            [192, 0, 0],
+            [64, 128, 0],
+            [192, 128, 0],
+            [64, 0, 128],
+            [192, 0, 128],
+            [64, 128, 128],
+            [192, 128, 128],
+            [0, 64, 0],
+            [128, 64, 0],
+            [0, 192, 0],
+            [128, 192, 0],
+            [0, 64, 128],
+        ]
+    )
+
 
 def make_palette(num_classes):
     """
@@ -92,9 +113,9 @@ def make_palette(num_classes):
         label = k
         i = 0
         while label:
-            palette[k, 0] |= (((label >> 0) & 1) << (7 - i))
-            palette[k, 1] |= (((label >> 1) & 1) << (7 - i))
-            palette[k, 2] |= (((label >> 2) & 1) << (7 - i))
+            palette[k, 0] |= ((label >> 0) & 1) << (7 - i)
+            palette[k, 1] |= ((label >> 1) & 1) << (7 - i)
+            palette[k, 2] |= ((label >> 2) & 1) << (7 - i)
             label >>= 3
             i += 1
     return palette

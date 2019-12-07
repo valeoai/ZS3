@@ -3,6 +3,7 @@ import torch.utils.data as data
 
 class CombineDBs(data.Dataset):
     NUM_CLASSES = 21
+
     def __init__(self, dataloaders, excluded=None):
         self.dataloaders = dataloaders
         self.excluded = excluded
@@ -31,19 +32,19 @@ class CombineDBs(data.Dataset):
                 if (curr_im_id in self.im_ids) and (curr_im_id not in new_im_ids):
                     num_images += 1
                     new_im_ids.append(curr_im_id)
-                    self.cat_list.append({'db_ii': ii, 'cat_ii': jj})
+                    self.cat_list.append({"db_ii": ii, "cat_ii": jj})
 
         self.im_ids = new_im_ids
-        print('Combined number of images: {:d}'.format(num_images))
+        print("Combined number of images: {:d}".format(num_images))
 
     def __getitem__(self, index):
 
         _db_ii = self.cat_list[index]["db_ii"]
-        _cat_ii = self.cat_list[index]['cat_ii']
+        _cat_ii = self.cat_list[index]["cat_ii"]
         sample = self.dataloaders[_db_ii].__getitem__(_cat_ii)
 
-        if 'meta' in sample.keys():
-            sample['meta']['db'] = str(self.dataloaders[_db_ii])
+        if "meta" in sample.keys():
+            sample["meta"]["db"] = str(self.dataloaders[_db_ii])
 
         return sample
 
@@ -53,7 +54,13 @@ class CombineDBs(data.Dataset):
     def __str__(self):
         include_db = [str(db) for db in self.dataloaders]
         exclude_db = [str(db) for db in self.excluded]
-        return 'Included datasets:'+str(include_db)+'\n'+'Excluded datasets:'+str(exclude_db)
+        return (
+            "Included datasets:"
+            + str(include_db)
+            + "\n"
+            + "Excluded datasets:"
+            + str(exclude_db)
+        )
 
 
 if __name__ == "__main__":
@@ -71,26 +78,28 @@ if __name__ == "__main__":
     args.base_size = 513
     args.crop_size = 513
 
-    pascal_voc_val = pascal.VOCSegmentation(args, split='val')
-    sbd = sbd.SBDSegmentation(args, split=['train', 'val'])
-    pascal_voc_train = pascal.VOCSegmentation(args, split='train')
+    pascal_voc_val = pascal.VOCSegmentation(args, split="val")
+    sbd = sbd.SBDSegmentation(args, split=["train", "val"])
+    pascal_voc_train = pascal.VOCSegmentation(args, split="train")
 
     dataset = CombineDBs([pascal_voc_train, sbd], excluded=[pascal_voc_val])
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=2, shuffle=True, num_workers=0)
+    dataloader = torch.utils.data.DataLoader(
+        dataset, batch_size=2, shuffle=True, num_workers=0
+    )
 
     for ii, sample in enumerate(dataloader):
         for jj in range(sample["image"].size()[0]):
-            img = sample['image'].numpy()
-            gt = sample['label'].numpy()
+            img = sample["image"].numpy()
+            gt = sample["label"].numpy()
             tmp = np.array(gt[jj]).astype(np.uint8)
-            segmap = decode_segmap(tmp, dataset='pascal')
+            segmap = decode_segmap(tmp, dataset="pascal")
             img_tmp = np.transpose(img[jj], axes=[1, 2, 0])
             img_tmp *= (0.229, 0.224, 0.225)
             img_tmp += (0.485, 0.456, 0.406)
             img_tmp *= 255.0
             img_tmp = img_tmp.astype(np.uint8)
             plt.figure()
-            plt.title('display')
+            plt.title("display")
             plt.subplot(211)
             plt.imshow(img_tmp)
             plt.subplot(212)
