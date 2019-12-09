@@ -57,20 +57,6 @@ class RandomHorizontalFlip:
         return {"image": img, "label": mask}
 
 
-class RandomRotate:
-    def __init__(self, degree):
-        self.degree = degree
-
-    def __call__(self, sample):
-        img = sample["image"]
-        mask = sample["label"]
-        rotate_degree = random.uniform(-1 * self.degree, self.degree)
-        img = img.rotate(rotate_degree, Image.BILINEAR)
-        mask = mask.rotate(rotate_degree, Image.NEAREST)
-
-        return {"image": img, "label": mask}
-
-
 class RandomGaussianBlur:
     def __call__(self, sample):
         img = sample["image"]
@@ -117,32 +103,6 @@ class RandomScaleCrop:
         return {"image": img, "label": mask}
 
 
-class FixScaleCrop:
-    def __init__(self, crop_size):
-        self.crop_size = crop_size
-
-    def __call__(self, sample):
-        img = sample["image"]
-        mask = sample["label"]
-        w, h = img.size
-        if w > h:
-            oh = self.crop_size
-            ow = int(1.0 * w * oh / h)
-        else:
-            ow = self.crop_size
-            oh = int(1.0 * h * ow / w)
-        img = img.resize((ow, oh), Image.BILINEAR)
-        mask = mask.resize((ow, oh), Image.NEAREST)
-        # center crop
-        w, h = img.size
-        x1 = int(round((w - self.crop_size) / 2.0))
-        y1 = int(round((h - self.crop_size) / 2.0))
-        img = img.crop((x1, y1, x1 + self.crop_size, y1 + self.crop_size))
-        mask = mask.crop((x1, y1, x1 + self.crop_size, y1 + self.crop_size))
-
-        return {"image": img, "label": mask}
-
-
 class FixScale:
     def __init__(self, crop_size):
         self.crop_size = crop_size
@@ -159,21 +119,5 @@ class FixScale:
             oh = int(1.0 * h * ow / w)
         img = img.resize((ow, oh), Image.BILINEAR)
         mask = mask.resize((ow, oh), Image.NEAREST)
-
-        return {"image": img, "label": mask}
-
-
-class FixedResize:
-    def __init__(self, size):
-        self.size = (size, size)  # size: (h, w)
-
-    def __call__(self, sample):
-        img = sample["image"]
-        mask = sample["label"]
-
-        assert img.size == mask.size
-
-        img = img.resize(self.size, Image.BILINEAR)
-        mask = mask.resize(self.size, Image.NEAREST)
 
         return {"image": img, "label": mask}

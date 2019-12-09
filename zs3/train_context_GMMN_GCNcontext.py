@@ -122,7 +122,7 @@ class Trainer:
         (
             self.train_loader,
             self.val_loader,
-            self.test_loader,
+            _,
             self.nclass,
         ) = make_data_loader(
             args=args,
@@ -185,9 +185,6 @@ class Trainer:
         self.criterion_generator = GMMNLoss(
             sigma=[2, 5, 10, 20, 40, 80], cuda=args.cuda
         ).build_loss()
-
-        if args.semantic_reconstruction:
-            self.criterion_semantic = nn.MSELoss()
 
         self.generator, self.optimizer_generator = generator, optimizer_generator
         self.generator_GCN, self.optimizer_generator_GCN = (

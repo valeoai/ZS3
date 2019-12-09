@@ -1,5 +1,6 @@
 import math
 
+import torch
 import torch.nn as nn
 
 from zs3.modeling.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
@@ -28,8 +29,6 @@ class Bottleneck(nn.Module):
         self.bn3 = BatchNorm(planes * 4)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
-        self.stride = stride
-        self.dilation = dilation
 
     def forward(self, x):
         residual = x
@@ -114,7 +113,6 @@ class ResNet(nn.Module):
             dilation=dilations[3],
             BatchNorm=BatchNorm,
         )
-        # self.layer4 = self._make_layer(block, 512, layers[3], stride=strides[3], dilation=dilations[3], BatchNorm=BatchNorm)
         self._init_weight()
 
         if pretrained:
@@ -242,13 +240,3 @@ def ResNet101(output_stride, BatchNorm, pretrained=True, imagenet_pretrained_pat
         imagenet_pretrained_path=imagenet_pretrained_path,
     )
     return model
-
-
-if __name__ == "__main__":
-    import torch
-
-    model = ResNet101(BatchNorm=nn.BatchNorm2d, pretrained=True, output_stride=8)
-    input = torch.rand(1, 3, 512, 512)
-    output, low_level_feat = model(input)
-    print(output.size())
-    print(low_level_feat.size())

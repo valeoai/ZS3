@@ -10,6 +10,6 @@ RUN pip install tensorboardX scikit-image tqdm pyyaml easydict future
 COPY ./ /ZS3
 RUN pip install -e /ZS3
 
-WORKDIR /ZS3/ZS3
+WORKDIR /ZS3/zs3
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility

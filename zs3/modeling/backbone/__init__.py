@@ -1,4 +1,4 @@
-from zs3.modeling.backbone import resnet, xception, drn, mobilenet
+from zs3.modeling.backbone import resnet
 
 
 def build_backbone(

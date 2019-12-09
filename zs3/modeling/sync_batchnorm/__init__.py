@@ -7,9 +7,5 @@
 # https://github.com/vacancy/Synchronized-BatchNorm-PyTorch
 # Distributed under MIT License.
 
-from .batchnorm import (
-    SynchronizedBatchNorm1d,
-    SynchronizedBatchNorm2d,
-    SynchronizedBatchNorm3d,
-)
-from .replicate import DataParallelWithCallback, patch_replication_callback
+from .batchnorm import SynchronizedBatchNorm2d
+from .replicate import patch_replication_callback
