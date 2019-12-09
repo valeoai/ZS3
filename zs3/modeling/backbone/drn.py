@@ -1,5 +1,6 @@
 import math
 
+import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
@@ -535,9 +536,7 @@ def drn_d_105(BatchNorm, pretrained=True):
     return model
 
 
-if __name__ == "__main__":
-    import torch
-
+def test_drn():
     model = drn_a_50(BatchNorm=nn.BatchNorm2d, pretrained=True)
     input = torch.rand(1, 3, 512, 512)
     output, low_level_feat = model(input)

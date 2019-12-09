@@ -45,44 +45,6 @@ class DATA_LOADER:
         self.index_in_epoch = 0
         self.epochs_completed = 0
 
-    # not tested
-    def read_h5dataset(self, opt):
-        # read image feature
-        fid = h5py.File(
-            opt.dataroot + "/" + opt.dataset + "/" + opt.image_embedding + ".hdf5", "r"
-        )
-        feature = fid["feature"][()]
-        label = fid["label"][()]
-        trainval_loc = fid["trainval_loc"][()]
-        train_loc = fid["train_loc"][()]
-        val_unseen_loc = fid["val_unseen_loc"][()]
-        test_seen_loc = fid["test_seen_loc"][()]
-        test_unseen_loc = fid["test_unseen_loc"][()]
-        fid.close()
-        # read attributes
-        fid = h5py.File(
-            opt.dataroot + "/" + opt.dataset + "/" + opt.class_embedding + ".hdf5", "r"
-        )
-        self.attribute = fid["attribute"][()]
-        fid.close()
-
-        if not opt.validation:
-            self.train_feature = feature[trainval_loc]
-            self.train_label = label[trainval_loc]
-            self.test_unseen_feature = feature[test_unseen_loc]
-            self.test_unseen_label = label[test_unseen_loc]
-            self.test_seen_feature = feature[test_seen_loc]
-            self.test_seen_label = label[test_seen_loc]
-        else:
-            self.train_feature = feature[train_loc]
-            self.train_label = label[train_loc]
-            self.test_unseen_feature = feature[val_unseen_loc]
-            self.test_unseen_label = label[val_unseen_loc]
-
-        self.seenclasses = np.unique(self.train_label)
-        self.unseenclasses = np.unique(self.test_unseen_label)
-        self.nclasses = self.seenclasses.size(0)
-
     def read_matimagenet(self, opt):
         if opt.preprocessing:
             print("MinMaxScaler...")
@@ -191,48 +153,9 @@ class DATA_LOADER:
 
         self.train_mapped_label = map_label(self.train_label, self.seenclasses)
 
-    def next_batch_one_class(self, batch_size):
-        if self.index_in_epoch == self.ntrain_class:
-            self.index_in_epoch = 0
-            perm = torch.randperm(self.ntrain_class)
-            self.train_class[perm] = self.train_class[perm]
-
-        iclass = self.train_class[self.index_in_epoch]
-        idx = self.train_label.eq(iclass).nonzero().squeeze()
-        perm = torch.randperm(idx.size(0))
-        idx = idx[perm]
-        iclass_feature = self.train_feature[idx]
-        iclass_label = self.train_label[idx]
-        self.index_in_epoch += 1
-        return (
-            iclass_feature[0:batch_size],
-            iclass_label[0:batch_size],
-            self.attribute[iclass_label[0:batch_size]],
-        )
-
     def next_batch(self, batch_size):
         idx = torch.randperm(self.ntrain)[0:batch_size]
         batch_feature = self.train_feature[idx]
         batch_label = self.train_label[idx]
         batch_att = self.attribute[batch_label]
-        return batch_feature, batch_label, batch_att
-
-    # select batch samples by randomly drawing batch_size classes
-    def next_batch_uniform_class(self, batch_size):
-        batch_class = torch.LongTensor(batch_size)
-        for i in range(batch_size):
-            idx = torch.randperm(self.ntrain_class)[0]
-            batch_class[i] = self.train_class[idx]
-
-        batch_feature = torch.FloatTensor(batch_size, self.train_feature.size(1))
-        batch_label = torch.LongTensor(batch_size)
-        batch_att = torch.FloatTensor(batch_size, self.attribute.size(1))
-        for i in range(batch_size):
-            iclass = batch_class[i]
-            idx_iclass = self.train_label.eq(iclass).nonzero().squeeze()
-            idx_in_iclass = torch.randperm(idx_iclass.size(0))[0]
-            idx_file = idx_iclass[idx_in_iclass]
-            batch_feature[i] = self.train_feature[idx_file]
-            batch_label[i] = self.train_label[idx_file]
-            batch_att[i] = self.attribute[batch_label[i]]
         return batch_feature, batch_label, batch_att

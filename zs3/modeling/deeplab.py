@@ -96,10 +96,6 @@ class DeepLab(nn.Module):
         x = F.interpolate(x, size=input_size, mode="bilinear", align_corners=True)
         return x
 
-    def forward_class_prediction_1d(self, x):
-        x = self.decoder.forward_class_prediction(x)
-        return x
-
     def forward_before_last_conv_finetune(self, input):
         x, low_level_feat = self.backbone(input)
         x = self.aspp(x)
@@ -108,16 +104,6 @@ class DeepLab(nn.Module):
 
     def forward_class_last_conv_finetune(self, x):
         x = self.decoder.forward_class_last_conv_finetune(x)
-        return x
-
-    def forward_before_decoder(self, input):
-        x, low_level_feat = self.backbone(input)
-        x = self.aspp(x)
-        return x, low_level_feat
-
-    def forward_decoder(self, x, low_level_feat, input_size):
-        x = self.decoder(x, low_level_feat)
-        x = F.interpolate(x, size=input_size, mode="bilinear", align_corners=True)
         return x
 
     def freeze_bn(self):
@@ -223,7 +209,7 @@ class DeepLabEmbedding(nn.Module):
                             yield p
 
 
-if __name__ == "__main__":
+def test_deeplab():
     model = DeepLab(backbone="mobilenet", output_stride=16)
     model.eval()
     input = torch.rand(1, 3, 513, 513)
