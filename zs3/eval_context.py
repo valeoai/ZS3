@@ -33,7 +33,7 @@ class Trainer:
         (
             self.train_loader,
             self.val_loader,
-            self.test_loader,
+            _,
             self.nclass,
         ) = make_data_loader(args, **kwargs)
 
@@ -208,7 +208,6 @@ class Trainer:
         self.evaluator.reset()
         all_target = []
         all_pred = []
-        all_pred_unseen = []
         tbar = tqdm(self.val_loader, desc="\r")
         test_loss = 0.0
         for i, sample in enumerate(tbar):
