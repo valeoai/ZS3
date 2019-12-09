@@ -41,14 +41,9 @@ class _ASPPModule(nn.Module):
 
 
 class ASPP(nn.Module):
-    def __init__(self, backbone, output_stride, BatchNorm, global_avg_pool_bn=True):
+    def __init__(self, output_stride, BatchNorm, global_avg_pool_bn=True):
         super().__init__()
-        if backbone == "drn":
-            inplanes = 512
-        elif backbone == "mobilenet":
-            inplanes = 320
-        else:
-            inplanes = 2048
+        inplanes = 2048
         if output_stride == 16:
             dilations = [1, 6, 12, 18]
         elif output_stride == 8:
@@ -134,5 +129,5 @@ class ASPP(nn.Module):
                 m.bias.data.zero_()
 
 
-def build_aspp(backbone, output_stride, BatchNorm, global_avg_pool_bn=True):
-    return ASPP(backbone, output_stride, BatchNorm, global_avg_pool_bn)
+def build_aspp(output_stride, BatchNorm, global_avg_pool_bn=True):
+    return ASPP(output_stride, BatchNorm, global_avg_pool_bn)

@@ -41,7 +41,6 @@ class Trainer:
 
         model = DeepLab(
             num_classes=self.nclass,
-            backbone=args.backbone,
             output_stride=args.out_stride,
             sync_bn=args.sync_bn,
             freeze_bn=args.freeze_bn,
@@ -523,13 +522,6 @@ class Trainer:
 def main():
     parser = argparse.ArgumentParser(description="PyTorch DeeplabV3Plus Training")
     parser.add_argument(
-        "--backbone",
-        type=str,
-        default="resnet",
-        choices=["resnet", "xception", "drn", "mobilenet"],
-        help="backbone name (default: resnet)",
-    )
-    parser.add_argument(
         "--out-stride", type=int, default=16, help="network output stride (default: 8)"
     )
 
@@ -868,7 +860,7 @@ def main():
         args.lr = lrs[args.dataset.lower()] / (4 * len(args.gpu_ids)) * args.batch_size
 
     if args.checkname is None:
-        args.checkname = "deeplab-" + str(args.backbone)
+        args.checkname = "deeplab-resnet"
     print(args)
     torch.manual_seed(args.seed)
     trainer = Trainer(args)

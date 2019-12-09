@@ -75,7 +75,6 @@ class Saver:
         log_file = open(logfile, "w")
         p = OrderedDict()
         p["datset"] = self.args.dataset
-        p["backbone"] = self.args.backbone
         p["out_stride"] = self.args.out_stride
         p["lr"] = self.args.lr
         p["lr_scheduler"] = self.args.lr_scheduler

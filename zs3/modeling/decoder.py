@@ -6,16 +6,9 @@ from zs3.modeling.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 
 
 class Decoder(nn.Module):
-    def __init__(self, num_classes, backbone, BatchNorm):
+    def __init__(self, num_classes, BatchNorm):
         super().__init__()
-        if backbone == "resnet" or backbone == "drn":
-            low_level_inplanes = 256
-        elif backbone == "xception":
-            low_level_inplanes = 128
-        elif backbone == "mobilenet":
-            low_level_inplanes = 24
-        else:
-            raise NotImplementedError
+        low_level_inplanes = 256
         self.conv1 = nn.Conv2d(low_level_inplanes, 48, 1, bias=False)
         self.bn1 = BatchNorm(48)
         self.relu = nn.ReLU()
@@ -90,5 +83,5 @@ class Decoder(nn.Module):
                 m.bias.data.zero_()
 
 
-def build_decoder(num_classes, backbone, BatchNorm):
-    return Decoder(num_classes, backbone, BatchNorm)
+def build_decoder(num_classes, BatchNorm):
+    return Decoder(num_classes, BatchNorm)
