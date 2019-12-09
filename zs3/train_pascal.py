@@ -291,13 +291,6 @@ def main():
     )
     parser.add_argument("--base-size", type=int, default=312, help="base image size")
     parser.add_argument("--crop-size", type=int, default=312, help="crop image size")
-
-    parser.add_argument(
-        "--sync-bn",
-        type=bool,
-        default=None,
-        help="whether to use sync bn (default: auto)",
-    )
     parser.add_argument(
         "--freeze-bn",
         type=bool,
