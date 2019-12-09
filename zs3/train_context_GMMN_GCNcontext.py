@@ -122,7 +122,7 @@ class Trainer:
         (
             self.train_loader,
             self.val_loader,
-            self.test_loader,
+            _,
             self.nclass,
         ) = make_data_loader(
             args=args,

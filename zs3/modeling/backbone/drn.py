@@ -142,7 +142,6 @@ class DRN(nn.Module):
     ):
         super().__init__()
         self.inplanes = channels[0]
-        self.out_dim = channels[-1]
         self.arch = arch
 
         if arch == "C":
@@ -364,7 +363,6 @@ class DRN_A(nn.Module):
     def __init__(self, block, layers, BatchNorm=None):
         self.inplanes = 64
         super().__init__()
-        self.out_dim = 512 * block.expansion
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = BatchNorm(64)
         self.relu = nn.ReLU(inplace=True)
