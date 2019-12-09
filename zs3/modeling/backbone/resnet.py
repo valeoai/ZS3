@@ -115,7 +115,6 @@ class ResNet(nn.Module):
             dilation=dilations[3],
             BatchNorm=BatchNorm,
         )
-        # self.layer4 = self._make_layer(block, 512, layers[3], stride=strides[3], dilation=dilations[3], BatchNorm=BatchNorm)
         self._init_weight()
 
         if pretrained:
