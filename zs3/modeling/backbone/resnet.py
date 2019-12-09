@@ -1,5 +1,6 @@
 import math
 
+import torch
 import torch.nn as nn
 
 from zs3.modeling.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
@@ -244,9 +245,7 @@ def ResNet101(output_stride, BatchNorm, pretrained=True, imagenet_pretrained_pat
     return model
 
 
-if __name__ == "__main__":
-    import torch
-
+def test_resnet():
     model = ResNet101(BatchNorm=nn.BatchNorm2d, pretrained=True, output_stride=8)
     input = torch.rand(1, 3, 512, 512)
     output, low_level_feat = model(input)
