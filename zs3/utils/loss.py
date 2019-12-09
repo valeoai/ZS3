@@ -116,33 +116,6 @@ class GMMNLoss:
         return loss
 
 
-class MSELoss:
-    def build_loss(self):
-        return self.mse_loss
-
-    def mse_loss(self, score, target, target_embed):
-        """Mean Square Vector between two (n,c,h,w) volumes (score and target).
-        ARGS
-          score: (n, c, h, w)
-          target: (n, h, w)
-          target_embed: (n, c, h, w)
-        RET
-          loss -> scalar
-        """
-        n, c, h, w = score.size()
-        # apply mask to score and target, and turn into 1d vectors for comparision
-        mask = target != 255  # ignore -1 (unknown classes); don't ignore 0 (background)
-        mask_size = mask.data.sum()
-        mask_tensor = mask.view(n, 1, h, w).repeat(1, c, 1, 1)
-        score_masked = score[mask_tensor]
-        target_embed_masked = target_embed[mask_tensor]
-        # # calculate loss on masked score and target
-        # same as: loss = (torch.sum((score_masked - target_embed_masked)**2))
-        loss = F.mse_loss(score_masked, target_embed_masked, size_average=False)
-        loss /= mask_size
-        return loss
-
-
 def test_losses():
     loss = SegmentationLosses(cuda=True)
     a = torch.rand(1, 3, 7, 7).cuda()

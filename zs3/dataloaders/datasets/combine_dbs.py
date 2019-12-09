@@ -24,7 +24,6 @@ class CombineDBs(data.Dataset):
 
         # Get object pointers
         self.cat_list = []
-        self.im_list = []
         new_im_ids = []
         num_images = 0
         for ii, dl in enumerate(dataloaders):
