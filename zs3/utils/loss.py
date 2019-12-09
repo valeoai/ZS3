@@ -29,7 +29,7 @@ class SegmentationLosses:
             raise NotImplementedError
 
     def CrossEntropyLoss(self, logit, target):
-        n, c, h, w = logit.size()
+        n, _, h, w = logit.size()
         criterion = nn.CrossEntropyLoss(
             weight=self.weight,
             ignore_index=self.ignore_index,
@@ -60,7 +60,7 @@ class SegmentationLosses:
         return loss
 
     def FocalLoss(self, logit, target, gamma=2, alpha=0.5):
-        n, c, h, w = logit.size()
+        n, _, h, w = logit.size()
         criterion = nn.CrossEntropyLoss(
             weight=self.weight,
             ignore_index=self.ignore_index,

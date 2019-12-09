@@ -29,8 +29,6 @@ class Bottleneck(nn.Module):
         self.bn3 = BatchNorm(planes * 4)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
-        self.stride = stride
-        self.dilation = dilation
 
     def forward(self, x):
         residual = x
