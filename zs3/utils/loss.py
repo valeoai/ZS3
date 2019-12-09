@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class SegmentationLosses:
@@ -114,12 +113,3 @@ class GMMNLoss:
 
         loss = torch.sqrt(loss)
         return loss
-
-
-def test_losses():
-    loss = SegmentationLosses(cuda=True)
-    a = torch.rand(1, 3, 7, 7).cuda()
-    b = torch.rand(1, 7, 7).cuda()
-    print(loss.CrossEntropyLoss(a, b).item())
-    print(loss.FocalLoss(a, b, gamma=0, alpha=None).item())
-    print(loss.FocalLoss(a, b, gamma=2, alpha=0.5).item())

@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -102,11 +101,3 @@ class DeepLab(nn.Module):
                     for p in m[1].parameters():
                         if p.requires_grad:
                             yield p
-
-
-def test_deeplab():
-    model = DeepLab(backbone="mobilenet", output_stride=16)
-    model.eval()
-    input = torch.rand(1, 3, 513, 513)
-    output = model(input)
-    print(output.size())

@@ -243,11 +243,3 @@ def ResNet101(output_stride, BatchNorm, pretrained=True, imagenet_pretrained_pat
         imagenet_pretrained_path=imagenet_pretrained_path,
     )
     return model
-
-
-def test_resnet():
-    model = ResNet101(BatchNorm=nn.BatchNorm2d, pretrained=True, output_stride=8)
-    input = torch.rand(1, 3, 512, 512)
-    output, low_level_feat = model(input)
-    print(output.size())
-    print(low_level_feat.size())
