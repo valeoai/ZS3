@@ -336,13 +336,6 @@ def main():
     )
     parser.add_argument("--base-size", type=int, default=513, help="base image size")
     parser.add_argument("--crop-size", type=int, default=513, help="crop image size")
-
-    parser.add_argument(
-        "--sync-bn",
-        type=bool,
-        default=None,
-        help="whether to use sync bn (default: auto)",
-    )
     parser.add_argument(
         "--freeze-bn",
         type=bool,
@@ -589,11 +582,7 @@ def main():
                 "Argument --gpu_ids must be a comma-separated list of integers only"
             )
 
-    if args.sync_bn is None:
-        if args.cuda and len(args.gpu_ids) > 1:
-            args.sync_bn = True
-        else:
-            args.sync_bn = False
+    args.sync_bn = args.cuda and len(args.gpu_ids) > 1
 
     # default settings for epochs, batch_size and lr
     if args.epochs is None:
