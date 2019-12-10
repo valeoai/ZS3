@@ -1,15 +1,33 @@
 from torch.utils import data
 import pickle
+import torch
 
 
 class BaseDataset(data.Dataset):
 
-    def __init__(self):
+    def __init__(self, args, base_dir, split, load_embedding, w2c_size, weak_label, transform):
         super().__init__()
+        self.args = args
+        self._base_dir = base_dir
+        self.split = split
+        self.load_embedding = load_embedding
+        self.w2c_size = w2c_size
+        if self.load_embedding:
+            self.init_embeddings()
         self.images = []
+        self.weak_label = weak_label
+        self.transform = transform
 
     def __len__(self):
         return len(self.images)
+
+    def init_embeddings(self):
+        raise NotImplementedError
+
+    def make_embeddings(self, embed_arr):
+        self.embeddings = torch.nn.Embedding(embed_arr.shape[0], embed_arr.shape[1])
+        self.embeddings.weight.requires_grad = False
+        self.embeddings.weight.data.copy_(torch.from_numpy(embed_arr))
 
     def get_embeddings(self, sample):
         mask = sample["label"] == 255

@@ -58,23 +58,11 @@ class VOCSegmentation(BaseDataset):
         :param split: train/val
         :param transform: transform to apply
         """
-        super().__init__()
-        self._base_dir = base_dir
+        super().__init__(args, base_dir, split, load_embedding, w2c_size, weak_label, transform)
         self._image_dir = os.path.join(self._base_dir, "JPEGImages")
         self._cat_dir = os.path.join(self._base_dir, "SegmentationClass")
 
-        self.transform = transform
-        self.weak_label = weak_label
         self.unseen_classes_idx_weak = unseen_classes_idx_weak
-
-        self.split = split
-
-        self.args = args
-
-        self.load_embedding = load_embedding
-        self.w2c_size = w2c_size
-        if self.load_embedding:
-            self.init_embeddings()
 
         _splits_dir = os.path.join(self._base_dir, "ImageSets", "Segmentation")
 
@@ -114,9 +102,7 @@ class VOCSegmentation(BaseDataset):
 
     def init_embeddings(self):
         embed_arr = load_obj("embeddings/pascal/w2c/norm_embed_arr_" + str(self.w2c_size))
-        self.embeddings = torch.nn.Embedding(embed_arr.shape[0], embed_arr.shape[1])
-        self.embeddings.weight.requires_grad = False
-        self.embeddings.weight.data.copy_(torch.from_numpy(embed_arr))
+        self.make_embeddings(embed_arr)
 
     def __getitem__(self, index):
         _img, _target = self._make_img_gt_point_pair(index)
