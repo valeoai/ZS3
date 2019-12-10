@@ -393,20 +393,6 @@ def main():
         default=False,
         help="whether use nesterov (default: False)",
     )
-    # cuda, seed and logging
-    parser.add_argument(
-        "--no-cuda", action="store_true", default=False, help="disables CUDA training"
-    )
-    parser.add_argument(
-        "--gpu-ids",
-        type=str,
-        default="0",
-        help="use which gpu to train, must be a \
-                        comma-separated list of integers only (default=0)",
-    )
-    parser.add_argument(
-        "--seed", type=int, default=1, metavar="S", help="random seed (default: 1)"
-    )
     # checking point
     parser.add_argument(
         "--resume", type=str, default=None, help="put the path to resuming file if needed"
@@ -423,10 +409,6 @@ def main():
         type=str,
         default="checkpoint/resnet_backbone_pretrained_imagenet_wo_pascalcontext.pth.tar",
         help="set the checkpoint name",
-    )
-
-    parser.add_argument(
-        "--exp_path", type=str, default="run", help="set the checkpoint name"
     )
 
     # finetuning pre-trained models

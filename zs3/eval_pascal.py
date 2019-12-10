@@ -449,19 +449,6 @@ def main():
         help="whether use nesterov (default: False)",
     )
     # cuda, seed and logging
-    parser.add_argument(
-        "--no-cuda", action="store_true", default=False, help="disables CUDA training"
-    )
-    parser.add_argument(
-        "--gpu-ids",
-        type=str,
-        default="0",
-        help="use which gpu to train, must be a \
-                        comma-separated list of integers only (default=0)",
-    )
-    parser.add_argument(
-        "--seed", type=int, default=1, metavar="S", help="random seed (default: 1)"
-    )
     # checking point
     parser.add_argument(
         "--imagenet_pretrained_path",
@@ -477,10 +464,6 @@ def main():
     )
 
     parser.add_argument("--checkname", type=str, default="pascal_eval")
-
-    parser.add_argument(
-        "--exp_path", type=str, default="run", help="set the checkpoint name"
-    )
 
     # finetuning pre-trained models
     parser.add_argument(
