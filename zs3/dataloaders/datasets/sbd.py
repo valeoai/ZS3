@@ -83,7 +83,7 @@ class SBDSegmentation(data.Dataset):
         assert len(self.images) == len(self.categories)
 
         # Display stats
-        print("(sbd) Number of images: {:d}".format(len(self.images)))
+        print(f"(sbd) Number of images: {len(self.images):d}")
 
     def lbl_contains_unseen(self, lbl, unseen):
         unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)

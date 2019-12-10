@@ -14,7 +14,7 @@ class Saver:
         run_id = int(self.runs[-1].split("_")[-1]) + 1 if self.runs else 0
 
         self.experiment_dir = os.path.join(
-            self.directory, "experiment_{}".format(str(run_id))
+            self.directory, f"experiment_{str(run_id)}"
         )
         print("experiment_dir: ", self.experiment_dir)
         if not os.path.exists(self.experiment_dir):
@@ -41,7 +41,7 @@ class Saver:
                     run_id = run.split("_")[-1]
                     path = os.path.join(
                         self.directory,
-                        "experiment_{}".format(str(run_id)),
+                        f"experiment_{str(run_id)}",
                         "best_pred.txt",
                     )
                     if os.path.exists(path):

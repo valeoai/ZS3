@@ -1,4 +1,3 @@
-import argparse
 import itertools
 import math
 import os
@@ -237,9 +236,7 @@ class Trainer:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
             # self.best_pred = checkpoint['best_pred']
             print(
-                "=> loaded checkpoint '{}' (epoch {})".format(
-                    args.resume, checkpoint["epoch"]
-                )
+                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
             )
 
         # Clear start epoch if fine-tuning
@@ -482,7 +479,7 @@ class Trainer:
                     pdb.set_trace()
                 # ===================log=====================
                 tbar.set_description(
-                    " G loss: %.3f" % generator_loss_batch
+                    f" G loss: {generator_loss_batch:.3f}"
                     + " C loss: %.3f" % (train_loss / (i + 1))
                 )
                 self.writer.add_scalar(
@@ -514,7 +511,7 @@ class Trainer:
             "[Epoch: %d, numImages: %5d]"
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
-        print("Loss: %.3f" % train_loss)
+        print(f"Loss: {train_loss:.3f}")
 
         if self.args.no_val:
             # save checkpoint every epoch
@@ -613,11 +610,9 @@ class Trainer:
             "[Epoch: %d, numImages: %5d]"
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
-        print("Loss: %.3f" % test_loss)
+        print(f"Loss: {test_loss:.3f}")
         print(
-            "Overall: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
-                Acc, Acc_class, mIoU, FWIoU
-            )
+            f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
         )
         print(
             "Seen: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
