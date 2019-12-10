@@ -4,12 +4,11 @@ import pathlib
 
 import numpy as np
 import scipy
-import torch
 from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from .base import BaseDataset, load_obj
+from .base import BaseDataset, lbl_contains_unseen
 
 
 CONTEXT_DIR = pathlib.Path('./data/context/')
@@ -37,7 +36,10 @@ class ContextSegmentation(BaseDataset):
         :param split: train/val
         :param transform: transform to apply
         """
-        super().__init__(args, base_dir, split,  load_embedding, w2c_size, weak_label, transform)
+        super().__init__(args, base_dir, split,
+                         load_embedding, w2c_size,
+                         weak_label, unseen_classes_idx_weak,
+                         transform)
 
         self._image_dir = os.path.join(
             self._base_dir, "pascal/VOCdevkit/VOC2012/JPEGImages"
@@ -87,7 +89,7 @@ class ContextSegmentation(BaseDataset):
             # if unseen classes and training split
             if len(args.unseen_classes_idx) > 0:
                 cat = self.load_label(_cat)
-                if self.lbl_contains_unseen(cat, args.unseen_classes_idx):
+                if lbl_contains_unseen(cat, args.unseen_classes_idx):
                     continue
 
             self.im_ids.append(line)
@@ -115,12 +117,6 @@ class ContextSegmentation(BaseDataset):
             if idx > 0:
                 label[label_459 == self.idx_59_to_idx_469[idx]] = idx
         return label
-
-    def lbl_contains_unseen(self, lbl, unseen):
-        unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)
-        if np.sum(unseen_pixel_mask) > 0:  # ignore images with any train_unseen pixels
-            return True
-        return False
 
     def init_embeddings(self):
         if self.load_embedding == "my_w2c":

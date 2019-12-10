@@ -1,21 +1,26 @@
 from torch.utils import data
 import pickle
 import torch
+import numpy as np
 
 
 class BaseDataset(data.Dataset):
 
-    def __init__(self, args, base_dir, split, load_embedding, w2c_size, weak_label, transform):
+    def __init__(self, args, base_dir, split,
+                 load_embedding, w2c_size,
+                 weak_label, unseen_classes_idx_weak, transform):
         super().__init__()
         self.args = args
         self._base_dir = base_dir
         self.split = split
         self.load_embedding = load_embedding
         self.w2c_size = w2c_size
+        self.embeddings = None
         if self.load_embedding:
             self.init_embeddings()
         self.images = []
         self.weak_label = weak_label
+        self.unseen_classes_idx_weak = unseen_classes_idx_weak
         self.transform = transform
 
     def __len__(self):
@@ -41,3 +46,10 @@ class BaseDataset(data.Dataset):
 def load_obj(name):
     with open(name + ".pkl", "rb") as f:
         return pickle.load(f, encoding="latin-1")
+
+
+def lbl_contains_unseen(lbl, unseen):
+    unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)
+    if np.sum(unseen_pixel_mask) > 0:  # ignore images with any train_unseen pixels
+        return True
+    return False

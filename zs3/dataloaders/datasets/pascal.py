@@ -2,12 +2,11 @@ import os
 import pathlib
 
 import numpy as np
-import torch
 from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from .base import BaseDataset, load_obj
+from .base import BaseDataset, load_obj, lbl_contains_unseen
 
 
 PASCAL_DIR = pathlib.Path('./data/VOC2012')
@@ -58,7 +57,9 @@ class VOCSegmentation(BaseDataset):
         :param split: train/val
         :param transform: transform to apply
         """
-        super().__init__(args, base_dir, split, load_embedding, w2c_size, weak_label, transform)
+        super().__init__(args, base_dir, split,
+                         load_embedding, w2c_size,
+                         weak_label, unseen_classes_idx_weak, transform)
         self._image_dir = os.path.join(self._base_dir, "JPEGImages")
         self._cat_dir = os.path.join(self._base_dir, "SegmentationClass")
 
@@ -82,7 +83,7 @@ class VOCSegmentation(BaseDataset):
             if len(args.unseen_classes_idx) > 0 and self.split == "train":
                 cat = Image.open(_cat)
                 cat = np.array(cat, dtype=np.uint8)
-                if self.lbl_contains_unseen(cat, args.unseen_classes_idx):
+                if lbl_contains_unseen(cat, args.unseen_classes_idx):
                     continue
 
             self.im_ids.append(line)
@@ -93,12 +94,6 @@ class VOCSegmentation(BaseDataset):
 
         # Display stats
         print(f"(pascal) Number of images in {split}: {len(self.images):d}")
-
-    def lbl_contains_unseen(self, lbl, unseen):
-        unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)
-        if np.sum(unseen_pixel_mask) > 0:  # ignore images with any train_unseen pixels
-            return True
-        return False
 
     def init_embeddings(self):
         embed_arr = load_obj("embeddings/pascal/w2c/norm_embed_arr_" + str(self.w2c_size))

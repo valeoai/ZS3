@@ -3,12 +3,11 @@ import pathlib
 
 import numpy as np
 import scipy.io
-import torch
 from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from .base import BaseDataset, load_obj
+from .base import BaseDataset, load_obj, lbl_contains_unseen
 
 SBD_DIR = pathlib.Path('./data/VOC2012/benchmark_RELEASE')
 
@@ -35,12 +34,12 @@ class SBDSegmentation(BaseDataset):
         if isinstance(split, str):
             split = [split]
         split.sort()
-        super().__init__(args, base_dir, split,  load_embedding, w2c_size, weak_label, transform)
+        super().__init__(args, base_dir, split,
+                         load_embedding, w2c_size,
+                         weak_label, unseen_classes_idx_weak, transform)
         self._dataset_dir = os.path.join(self._base_dir, "dataset")
         self._image_dir = os.path.join(self._dataset_dir, "img")
         self._cat_dir = os.path.join(self._dataset_dir, "cls")
-
-        self.unseen_classes_idx_weak = unseen_classes_idx_weak
 
         # Get list of all images from the split and check that the files exist
         self.im_ids = []
@@ -61,7 +60,7 @@ class SBDSegmentation(BaseDataset):
                         scipy.io.loadmat(_categ)["GTcls"][0]["Segmentation"][0]
                     )
                     _target = np.array(_target, dtype=np.uint8)
-                    if self.lbl_contains_unseen(_target, args.unseen_classes_idx):
+                    if lbl_contains_unseen(_target, args.unseen_classes_idx):
                         continue
 
                 self.im_ids.append(line)
@@ -72,12 +71,6 @@ class SBDSegmentation(BaseDataset):
 
         # Display stats
         print(f"(sbd) Number of images: {len(self.images):d}")
-
-    def lbl_contains_unseen(self, lbl, unseen):
-        unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)
-        if np.sum(unseen_pixel_mask) > 0:  # ignore images with any train_unseen pixels
-            return True
-        return False
 
     def init_embeddings(self):
         if self.load_embedding == "attributes":
