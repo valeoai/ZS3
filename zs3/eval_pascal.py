@@ -387,7 +387,6 @@ def main():
         help="number of epochs to train (default: auto)",
     )
 
-
     # PASCAL VOC
     parser.add_argument(
         "--batch-size",
@@ -395,43 +394,6 @@ def main():
         default=8,
         metavar="N",
         help="input batch size for training (default: auto)",
-    )
-
-
-
-
-    # optimizer params
-    # PASCAL VOC
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=0.007,
-        metavar="LR",
-        help="learning rate (default: auto)",
-    )
-
-    parser.add_argument(
-        "--lr-scheduler",
-        type=str,
-        default="poly",
-        choices=["poly", "step", "cos"],
-        help="lr scheduler mode: (default: poly)",
-    )
-    parser.add_argument(
-        "--momentum", type=float, default=0.9, metavar="M", help="momentum (default: 0.9)"
-    )
-    parser.add_argument(
-        "--weight-decay",
-        type=float,
-        default=5e-4,
-        metavar="M",
-        help="w-decay (default: 5e-4)",
-    )
-    parser.add_argument(
-        "--nesterov",
-        action="store_true",
-        default=False,
-        help="whether use nesterov (default: False)",
     )
     # cuda, seed and logging
     # checking point
