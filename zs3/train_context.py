@@ -332,10 +332,6 @@ def main():
         help="number of epochs to train (default: auto)",
     )
 
-    parser.add_argument(
-        "--start_epoch", type=int, default=0, metavar="N", help="start epochs (default:0)"
-    )
-
     # PASCAL VOC
     parser.add_argument(
         "--batch-size",
@@ -343,15 +339,6 @@ def main():
         default=10,
         metavar="N",
         help="input batch size for training (default: auto)",
-    )
-
-    parser.add_argument(
-        "--test-batch-size",
-        type=int,
-        default=1,
-        metavar="N",
-        help="input batch size for \
-                                testing (default: auto)",
     )
     parser.add_argument(
         "--use-balanced-weights",

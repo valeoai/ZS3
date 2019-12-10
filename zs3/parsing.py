@@ -28,4 +28,14 @@ def get_parser():
         help="use which gpu to train, must be a \
                             comma-separated list of integers only (default=0)",
     )
+    parser.add_argument(
+        "--start_epoch", type=int, default=0, metavar="N", help="start epochs (default:0)"
+    )
+    parser.add_argument(
+        "--test-batch-size",
+        type=int,
+        default=1,
+        metavar="N",
+        help="input batch size for testing (default: auto)",
+    )
     return parser
