@@ -7,16 +7,16 @@ import numpy as np
 import scipy
 import torch
 from PIL import Image
-from torch.utils.data import Dataset
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
+from .base import BaseDataset
 
 
 CONTEXT_DIR = pathlib.Path('./data/context/')
 
 
-class ContextSegmentation(Dataset):
+class ContextSegmentation(BaseDataset):
     """
     PascalVoc dataset
     """
@@ -63,7 +63,6 @@ class ContextSegmentation(Dataset):
         _splits_dir = os.path.join(self._base_dir)
 
         self.im_ids = []
-        self.images = []
         self.categories = []
 
         self.labels_459 = [
@@ -143,9 +142,6 @@ class ContextSegmentation(Dataset):
         self.embeddings = torch.nn.Embedding(embed_arr.shape[0], embed_arr.shape[1])
         self.embeddings.weight.requires_grad = False
         self.embeddings.weight.data.copy_(torch.from_numpy(embed_arr))
-
-    def __len__(self):
-        return len(self.images)
 
     def __getitem__(self, index):
         _img, _target = self._make_img_gt_point_pair(index)

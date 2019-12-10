@@ -5,17 +5,16 @@ import pathlib
 import numpy as np
 import scipy.io
 import torch
-import torch.utils.data as data
 from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-
+from .base import BaseDataset
 
 SBD_DIR = pathlib.Path('./data/VOC2012/benchmark_RELEASE')
 
 
-class SBDSegmentation(data.Dataset):
+class SBDSegmentation(BaseDataset):
     NUM_CLASSES = 21
 
     def __init__(
@@ -58,7 +57,6 @@ class SBDSegmentation(data.Dataset):
         self.args = args
         # Get list of all images from the split and check that the files exist
         self.im_ids = []
-        self.images = []
         self.categories = []
         for splt in self.split:
             with open(os.path.join(self._dataset_dir, splt + ".txt"), "r") as f:
@@ -145,9 +143,6 @@ class SBDSegmentation(data.Dataset):
             sample["label_emb"] = lbl_vec
         sample["image_name"] = self.images[index]
         return sample
-
-    def __len__(self):
-        return len(self.images)
 
     def _make_img_gt_point_pair(self, index):
         _img = Image.open(self.images[index]).convert("RGB")

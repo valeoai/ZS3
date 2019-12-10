@@ -5,16 +5,16 @@ import pathlib
 import numpy as np
 import torch
 from PIL import Image
-from torch.utils.data import Dataset
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
+from .base import BaseDataset
 
 
 PASCAL_DIR = pathlib.Path('./data/VOC2012')
 
 
-class VOCSegmentation(Dataset):
+class VOCSegmentation(BaseDataset):
     class_names = [
         "background",  # class 0
         "aeroplane",  # class 1
@@ -80,7 +80,6 @@ class VOCSegmentation(Dataset):
         _splits_dir = os.path.join(self._base_dir, "ImageSets", "Segmentation")
 
         self.im_ids = []
-        self.images = []
         self.categories = []
 
         with open(os.path.join(os.path.join(_splits_dir, self.split + ".txt")), "r") as f:
@@ -119,9 +118,6 @@ class VOCSegmentation(Dataset):
         self.embeddings = torch.nn.Embedding(embed_arr.shape[0], embed_arr.shape[1])
         self.embeddings.weight.requires_grad = False
         self.embeddings.weight.data.copy_(torch.from_numpy(embed_arr))
-
-    def __len__(self):
-        return len(self.images)
 
     def __getitem__(self, index):
         _img, _target = self._make_img_gt_point_pair(index)
