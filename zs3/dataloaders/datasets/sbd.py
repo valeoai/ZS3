@@ -134,12 +134,7 @@ class SBDSegmentation(BaseDataset):
             sample = self.transform_weak(sample)
 
         if self.load_embedding:
-            mask = sample["label"] == 255
-            sample["label"][mask] = 0
-            lbl_vec = self.embeddings(sample["label"].long()).data
-            lbl_vec = lbl_vec.permute(2, 0, 1)
-            sample["label"][mask] = 255
-            sample["label_emb"] = lbl_vec
+            self.get_embeddings(sample)
         sample["image_name"] = self.images[index]
         return sample
 
