@@ -1,5 +1,4 @@
 import os
-import pickle
 import pathlib
 
 import numpy as np
@@ -9,7 +8,7 @@ from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from .base import BaseDataset
+from .base import BaseDataset, load_obj
 
 SBD_DIR = pathlib.Path('./data/VOC2012/benchmark_RELEASE')
 
@@ -180,8 +179,3 @@ class SBDSegmentation(BaseDataset):
 
     def __str__(self):
         return f"SBDSegmentation(split={self.split})"
-
-
-def load_obj(name):
-    with open(name + ".pkl", "rb") as f:
-        return pickle.load(f, encoding="latin-1")
