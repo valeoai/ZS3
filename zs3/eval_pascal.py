@@ -455,13 +455,6 @@ def main():
 
     parser.add_argument("--checkname", type=str, default="pascal_eval")
 
-    # finetuning pre-trained models
-    parser.add_argument(
-        "--ft",
-        action="store_true",
-        default=False,
-        help="finetuning on a different dataset",
-    )
     # evaluation option
     parser.add_argument(
         "--eval-interval", type=int, default=5, help="evaluation interval (default: 1)"

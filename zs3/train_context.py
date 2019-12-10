@@ -398,13 +398,6 @@ def main():
         help="set the checkpoint name",
     )
 
-    # finetuning pre-trained models
-    parser.add_argument(
-        "--ft",
-        action="store_true",
-        default=False,
-        help="finetuning on a different dataset",
-    )
     # evaluation option
     parser.add_argument(
         "--eval-interval", type=int, default=10, help="evaluation interval (default: 1)"

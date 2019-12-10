@@ -594,13 +594,6 @@ def main():
     # false if embedding resume
     parser.add_argument("--global_avg_pool_bn", type=bool, default=True)
 
-    # finetuning pre-trained models
-    parser.add_argument(
-        "--ft",
-        action="store_true",
-        default=False,
-        help="finetuning on a different dataset",
-    )
     # evaluation option
     parser.add_argument(
         "--eval-interval", type=int, default=1, help="evaluation interval (default: 1)"

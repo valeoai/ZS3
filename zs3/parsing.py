@@ -38,4 +38,11 @@ def get_parser():
         metavar="N",
         help="input batch size for testing (default: auto)",
     )
+    # finetuning pre-trained models
+    parser.add_argument(
+        "--ft",
+        action="store_true",
+        default=False,
+        help="finetuning on a different dataset",
+    )
     return parser
