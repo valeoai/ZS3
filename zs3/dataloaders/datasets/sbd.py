@@ -181,45 +181,7 @@ class SBDSegmentation(data.Dataset):
         return composed_transforms(sample)
 
     def __str__(self):
-        return "SBDSegmentation(split=" + str(self.split) + ")"
-
-
-if __name__ == "__main__":
-    from zs3.dataloaders.utils import decode_segmap
-    from torch.utils.data import DataLoader
-    import matplotlib.pyplot as plt
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    args = parser.parse_args()
-    args.base_size = 513
-    args.crop_size = 513
-
-    sbd_train = SBDSegmentation(args, split="train")
-    dataloader = DataLoader(sbd_train, batch_size=2, shuffle=True, num_workers=2)
-
-    for ii, sample in enumerate(dataloader):
-        for jj in range(sample["image"].size()[0]):
-            img = sample["image"].numpy()
-            gt = sample["label"].numpy()
-            tmp = np.array(gt[jj]).astype(np.uint8)
-            segmap = decode_segmap(tmp, dataset="pascal")
-            img_tmp = np.transpose(img[jj], axes=[1, 2, 0])
-            img_tmp *= (0.229, 0.224, 0.225)
-            img_tmp += (0.485, 0.456, 0.406)
-            img_tmp *= 255.0
-            img_tmp = img_tmp.astype(np.uint8)
-            plt.figure()
-            plt.title("display")
-            plt.subplot(211)
-            plt.imshow(img_tmp)
-            plt.subplot(212)
-            plt.imshow(segmap)
-
-        if ii == 1:
-            break
-
-    plt.show(block=True)
+        return f"SBDSegmentation(split={self.split})"
 
 
 def load_obj(name):
