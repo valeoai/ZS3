@@ -132,9 +132,7 @@ class Trainer:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
             self.best_pred = checkpoint["best_pred"]
             print(
-                "=> loaded checkpoint '{}' (epoch {})".format(
-                    args.resume, checkpoint["epoch"]
-                )
+                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
             )
 
         # Clear start epoch if fine-tuning
@@ -210,11 +208,9 @@ class Trainer:
             "[Epoch: %d, numImages: %5d]"
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
-        print("Loss: %.3f" % test_loss)
+        print(f"Loss: {test_loss:.3f}")
         print(
-            "Overall: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
-                Acc, Acc_class, mIoU, FWIoU
-            )
+            f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
         )
         print(
             "Seen: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(

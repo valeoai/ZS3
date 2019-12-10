@@ -103,7 +103,7 @@ class VOCSegmentation(Dataset):
         assert len(self.images) == len(self.categories)
 
         # Display stats
-        print("(pascal) Number of images in {}: {:d}".format(split, len(self.images)))
+        print(f"(pascal) Number of images in {split}: {len(self.images):d}")
 
     def lbl_contains_unseen(self, lbl, unseen):
         unseen_pixel_mask = np.in1d(lbl.ravel(), unseen)
