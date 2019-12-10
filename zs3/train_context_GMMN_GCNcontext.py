@@ -76,7 +76,7 @@ def construct_adj_mat(segmap, embeddingmap, featmap, avg_feat=False):
                         feat_cur = (feat_cur * (cnt - 1) + featmap[:, i, j]) / cnt
                 for (dx, dy) in itertools.product(range(-1, 2, 1), range(-1, 2, 1)):
                     (nebi, nebj) = (curi + dx, curj + dy)
-                    if nebi >= 0 and nebi < N and nebj >= 0 and nebj < M:
+                    if 0 <= nebi < N and 0 <= nebj < M:
                         if flag[nebi][nebj] == -1 and segmap[nebi][nebj] == cluster_lbl:
                             stack.append((nebi, nebj))
                         if flag[nebi][nebj] >= 0 and segmap[nebi][nebj] != cluster_lbl:
@@ -93,12 +93,7 @@ def construct_adj_mat(segmap, embeddingmap, featmap, avg_feat=False):
 
     if N_cluster > 1:
         adj_mat = sp.coo_matrix((data, (row, col)), shape=(N_cluster, N_cluster))
-        try:
-            adj_mat = sparse_mx_to_torch_sparse_tensor(adj_mat)
-        except:
-            import pdb
-
-            pdb.set_trace()
+        adj_mat = sparse_mx_to_torch_sparse_tensor(adj_mat)
     else:
         adj_mat = None
 
