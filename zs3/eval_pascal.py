@@ -398,12 +398,7 @@ def main():
     )
 
 
-    parser.add_argument(
-        "--use-balanced-weights",
-        action="store_true",
-        default=False,
-        help="whether to use balanced weights (default: False)",
-    )
+
 
     # optimizer params
     # PASCAL VOC
@@ -459,13 +454,6 @@ def main():
     parser.add_argument(
         "--eval-interval", type=int, default=5, help="evaluation interval (default: 1)"
     )
-    parser.add_argument(
-        "--no-val",
-        action="store_true",
-        default=False,
-        help="skip validation during training",
-    )
-
     ### FOR IMAGE SELECTION IN ORDER TO TAKE OFF IMAGE WITH UNSEEN CLASSES FOR TRAINING AND VALIDATION
     # keep empty
     parser.add_argument("--unseen_classes_idx", type=int, default=[])

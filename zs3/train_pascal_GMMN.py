@@ -531,13 +531,6 @@ def main():
         metavar="N",
         help="input batch size for training (default: auto)",
     )
-    parser.add_argument(
-        "--use-balanced-weights",
-        action="store_true",
-        default=False,
-        help="whether to use balanced weights (default: False)",
-    )
-
     # optimizer params
     # PASCAL VOC
     parser.add_argument(
@@ -598,13 +591,6 @@ def main():
     parser.add_argument(
         "--eval-interval", type=int, default=1, help="evaluation interval (default: 1)"
     )
-    parser.add_argument(
-        "--no-val",
-        action="store_true",
-        default=False,
-        help="skip validation during training",
-    )
-
     # keep empty
     parser.add_argument("--unseen_classes_idx", type=int, default=[])
 

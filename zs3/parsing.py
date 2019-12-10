@@ -45,4 +45,16 @@ def get_parser():
         default=False,
         help="finetuning on a different dataset",
     )
+    parser.add_argument(
+        "--no-val",
+        action="store_true",
+        default=False,
+        help="skip validation during training",
+    )
+    parser.add_argument(
+        "--use-balanced-weights",
+        action="store_true",
+        default=False,
+        help="whether to use balanced weights (default: False)",
+    )
     return parser
