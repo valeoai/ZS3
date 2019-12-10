@@ -1,4 +1,3 @@
-import argparse
 import os
 
 import numpy as np
@@ -15,6 +14,7 @@ from zs3.utils.lr_scheduler import LR_Scheduler
 from zs3.utils.metrics import Evaluator
 from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
+from zs3.parsing import get_parser
 
 
 class Trainer:
@@ -520,7 +520,7 @@ class Trainer:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PyTorch DeeplabV3Plus Training")
+    parser = get_parser()
     parser.add_argument(
         "--out-stride", type=int, default=16, help="network output stride (default: 8)"
     )
@@ -540,17 +540,8 @@ def main():
         default=True,
         help="whether to use SBD dataset (default: True)",
     )
-    parser.add_argument(
-        "--workers", type=int, default=4, metavar="N", help="dataloader threads"
-    )
     parser.add_argument("--base-size", type=int, default=312, help="base image size")
     parser.add_argument("--crop-size", type=int, default=312, help="crop image size")
-    parser.add_argument(
-        "--freeze-bn",
-        type=bool,
-        default=False,
-        help="whether to freeze bn parameters (default: False)",
-    )
     parser.add_argument(
         "--loss-type",
         type=str,
