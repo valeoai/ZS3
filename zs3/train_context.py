@@ -1,4 +1,3 @@
-import argparse
 import os
 
 import numpy as np
@@ -15,6 +14,8 @@ from zs3.utils.lr_scheduler import LR_Scheduler
 from zs3.utils.metrics import Evaluator
 from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
+from zs3.parsing import get_parser
+from zs3.exp_data import CLASSES_NAMES
 
 
 class Trainer:
@@ -167,69 +168,6 @@ class Trainer:
             )
 
     def validation(self, epoch):
-        class_names = [
-            "background",  # class 0
-            "aeroplane",  # class 1
-            "bicycle",  # class 2
-            "bird",  # class 3
-            "boat",  # class 4
-            "bottle",  # class 5
-            "bus",  # class 6
-            "car",  # class 7
-            "cat",  # class 8
-            "chair",  # class 9
-            "cow",  # class 10
-            "table",  # class 11
-            "dog",  # class 12
-            "horse",  # class 13
-            "motorbike",  # class 14
-            "person",  # class 15
-            "pottedplant",  # class 16
-            "sheep",  # class 17
-            "sofa",  # class 18
-            "train",  # class 19
-            "tvmonitor",  # class 20
-            "bag",  # class 21
-            "bed",  # class 22
-            "bench",  # class 23
-            "book",  # class 24
-            "building",  # class 25
-            "cabinet",  # class 26
-            "ceiling",  # class 27
-            "cloth",  # class 28
-            "computer",  # class 29
-            "cup",  # class 30
-            "door",  # class 31
-            "fence",  # class 32
-            "floor",  # class 33
-            "flower",  # class 34
-            "food",  # class 35
-            "grass",  # class 36
-            "ground",  # class 37
-            "keyboard",  # class 38
-            "light",  # class 39
-            "mountain",  # class 40
-            "mouse",  # class 41
-            "curtain",  # class 42
-            "platform",  # class 43
-            "sign",  # class 44
-            "plate",  # class 45
-            "road",  # class 46
-            "rock",  # class 47
-            "shelves",  # class 48
-            "sidewalk",  # class 49
-            "sky",  # class 50
-            "snow",  # class 51
-            "bedclothes",  # class 52
-            "track",  # class 53
-            "tree",  # class 54
-            "truck",  # class 55
-            "wall",  # class 56
-            "water",  # class 57
-            "window",  # class 58
-            "wood",  # class 59
-        ]
-
         self.model.eval()
         self.evaluator.reset()
         tbar = tqdm(self.val_loader, desc="\r")
@@ -270,11 +208,11 @@ class Trainer:
         print("Loss: %.3f" % test_loss)
 
         for i, (class_name, acc_value, mIoU_value) in enumerate(
-            zip(class_names, Acc_class_by_class, mIoU_by_class)
+            zip(CLASSES_NAMES, Acc_class_by_class, mIoU_by_class)
         ):
             self.writer.add_scalar("Acc_by_class/" + class_name, acc_value, epoch)
             self.writer.add_scalar("mIoU_by_class/" + class_name, mIoU_value, epoch)
-            print(class_names[i], "- acc:", acc_value, " mIoU:", mIoU_value)
+            print(CLASSES_NAMES[i], "- acc:", acc_value, " mIoU:", mIoU_value)
 
         new_pred = mIoU
         is_best = True
@@ -291,7 +229,7 @@ class Trainer:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PyTorch DeeplabV3Plus Training")
+    parser = get_parser()
     parser.add_argument(
         "--imagenet_pretrained",
         type=bool,
@@ -312,17 +250,17 @@ def main():
         help="dataset name (default: pascal)",
     )
 
-    parser.add_argument(
-        "--workers", type=int, default=4, metavar="N", help="dataloader threads"
-    )
     parser.add_argument("--base-size", type=int, default=312, help="base image size")
     parser.add_argument("--crop-size", type=int, default=312, help="crop image size")
+<<<<<<< HEAD
     parser.add_argument(
         "--freeze-bn",
         type=bool,
         default=False,
         help="whether to freeze bn parameters (default: False)",
     )
+=======
+>>>>>>> batchnorm_choice
     parser.add_argument(
         "--loss-type",
         type=str,
@@ -341,10 +279,6 @@ def main():
         help="number of epochs to train (default: auto)",
     )
 
-    parser.add_argument(
-        "--start_epoch", type=int, default=0, metavar="N", help="start epochs (default:0)"
-    )
-
     # PASCAL VOC
     parser.add_argument(
         "--batch-size",
@@ -352,69 +286,6 @@ def main():
         default=10,
         metavar="N",
         help="input batch size for training (default: auto)",
-    )
-
-    parser.add_argument(
-        "--test-batch-size",
-        type=int,
-        default=1,
-        metavar="N",
-        help="input batch size for \
-                                testing (default: auto)",
-    )
-    parser.add_argument(
-        "--use-balanced-weights",
-        action="store_true",
-        default=False,
-        help="whether to use balanced weights (default: False)",
-    )
-
-    # optimizer params
-    # PASCAL VOC
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=0.007,
-        metavar="LR",
-        help="learning rate (default: auto)",
-    )
-
-    parser.add_argument(
-        "--lr-scheduler",
-        type=str,
-        default="poly",
-        choices=["poly", "step", "cos"],
-        help="lr scheduler mode: (default: poly)",
-    )
-    parser.add_argument(
-        "--momentum", type=float, default=0.9, metavar="M", help="momentum (default: 0.9)"
-    )
-    parser.add_argument(
-        "--weight-decay",
-        type=float,
-        default=5e-4,
-        metavar="M",
-        help="w-decay (default: 5e-4)",
-    )
-    parser.add_argument(
-        "--nesterov",
-        action="store_true",
-        default=False,
-        help="whether use nesterov (default: False)",
-    )
-    # cuda, seed and logging
-    parser.add_argument(
-        "--no-cuda", action="store_true", default=False, help="disables CUDA training"
-    )
-    parser.add_argument(
-        "--gpu-ids",
-        type=str,
-        default="0",
-        help="use which gpu to train, must be a \
-                        comma-separated list of integers only (default=0)",
-    )
-    parser.add_argument(
-        "--seed", type=int, default=1, metavar="S", help="random seed (default: 1)"
     )
     # checking point
     parser.add_argument(
@@ -434,90 +305,10 @@ def main():
         help="set the checkpoint name",
     )
 
-    parser.add_argument(
-        "--exp_path", type=str, default="run", help="set the checkpoint name"
-    )
-
-    # finetuning pre-trained models
-    parser.add_argument(
-        "--ft",
-        action="store_true",
-        default=False,
-        help="finetuning on a different dataset",
-    )
     # evaluation option
     parser.add_argument(
         "--eval-interval", type=int, default=10, help="evaluation interval (default: 1)"
     )
-    parser.add_argument(
-        "--no-val",
-        action="store_true",
-        default=False,
-        help="skip validation during training",
-    )
-
-    class_names = [
-        "background",  # class 0
-        "aeroplane",  # class 1
-        "bicycle",  # class 2
-        "bird",  # class 3
-        "boat",  # class 4
-        "bottle",  # class 5
-        "bus",  # class 6
-        "car",  # class 7
-        "cat",  # class 8
-        "chair",  # class 9
-        "cow",  # class 10
-        "table",  # class 11
-        "dog",  # class 12
-        "horse",  # class 13
-        "motorbike",  # class 14
-        "person",  # class 15
-        "pottedplant",  # class 16
-        "sheep",  # class 17
-        "sofa",  # class 18
-        "train",  # class 19
-        "tvmonitor",  # class 20
-        "bag",  # class 21
-        "bed",  # class 22
-        "bench",  # class 23
-        "book",  # class 24
-        "building",  # class 25
-        "cabinet",  # class 26
-        "ceiling",  # class 27
-        "cloth",  # class 28
-        "computer",  # class 29
-        "cup",  # class 30
-        "door",  # class 31
-        "fence",  # class 32
-        "floor",  # class 33
-        "flower",  # class 34
-        "food",  # class 35
-        "grass",  # class 36
-        "ground",  # class 37
-        "keyboard",  # class 38
-        "light",  # class 39
-        "mountain",  # class 40
-        "mouse",  # class 41
-        "curtain",  # class 42
-        "platform",  # class 43
-        "sign",  # class 44
-        "plate",  # class 45
-        "road",  # class 46
-        "rock",  # class 47
-        "shelves",  # class 48
-        "sidewalk",  # class 49
-        "sky",  # class 50
-        "snow",  # class 51
-        "bedclothes",  # class 52
-        "track",  # class 53
-        "tree",  # class 54
-        "truck",  # class 55
-        "wall",  # class 56
-        "water",  # class 57
-        "window",  # class 58
-        "wood",  # class 59
-    ]
 
     # 2 unseen
     unseen_names = ["cow", "motorbike"]
@@ -532,7 +323,7 @@ def main():
 
     unseen_classes_idx = []
     for name in unseen_names:
-        unseen_classes_idx.append(class_names.index(name))
+        unseen_classes_idx.append(CLASSES_NAMES.index(name))
     print(unseen_classes_idx)
     # all classes
     parser.add_argument("--unseen_classes_idx", type=int, default=unseen_classes_idx)
