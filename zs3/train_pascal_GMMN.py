@@ -505,15 +505,6 @@ def main():
     )
     parser.add_argument("--base-size", type=int, default=312, help="base image size")
     parser.add_argument("--crop-size", type=int, default=312, help="crop image size")
-<<<<<<< HEAD
-    parser.add_argument(
-        "--freeze-bn",
-        type=bool,
-        default=False,
-        help="whether to freeze bn parameters (default: False)",
-    )
-=======
->>>>>>> batchnorm_choice
     parser.add_argument(
         "--loss-type",
         type=str,
