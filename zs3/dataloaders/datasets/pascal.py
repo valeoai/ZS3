@@ -1,5 +1,6 @@
 import os
 import pickle
+import pathlib
 
 import numpy as np
 import torch
@@ -8,7 +9,9 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from zs3.mypath import Path
+
+
+PASCAL_DIR = pathlib.Path('./data/VOC2012')
 
 
 class VOCSegmentation(Dataset):
@@ -43,7 +46,7 @@ class VOCSegmentation(Dataset):
     def __init__(
         self,
         args,
-        base_dir=Path.db_root_dir("pascal"),
+        base_dir=PASCAL_DIR,
         split="train",
         load_embedding=None,
         w2c_size=300,

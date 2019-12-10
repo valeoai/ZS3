@@ -1,5 +1,6 @@
 import os
 import pickle
+import pathlib
 
 import numpy as np
 import scipy.io
@@ -9,7 +10,9 @@ from PIL import Image
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from zs3.mypath import Path
+
+
+SBD_DIR = pathlib.Path('./data/VOC2012/benchmark_RELEASE')
 
 
 class SBDSegmentation(data.Dataset):
@@ -18,7 +21,7 @@ class SBDSegmentation(data.Dataset):
     def __init__(
         self,
         args,
-        base_dir=Path.db_root_dir("sbd"),
+        base_dir=SBD_DIR,
         split="train",
         load_embedding=None,
         w2c_size=300,

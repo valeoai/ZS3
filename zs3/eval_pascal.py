@@ -1,4 +1,3 @@
-import argparse
 import os
 
 import numpy as np
@@ -8,7 +7,7 @@ from tqdm import tqdm
 from zs3.dataloaders import make_data_loader
 from zs3.modeling.deeplab import DeepLab
 from zs3.modeling.sync_batchnorm.replicate import patch_replication_callback
-from zs3.mypath import Path
+from zs3.dataloaders.datasets import DATASETS_DIRS
 from zs3.utils.calculate_weights import calculate_weigths_labels
 from zs3.utils.loss import SegmentationLosses
 from zs3.utils.lr_scheduler import LR_Scheduler
@@ -61,9 +60,8 @@ class Trainer:
         # Define Criterion
         # whether to use class balanced weights
         if args.use_balanced_weights:
-            classes_weights_path = os.path.join(
-                Path.db_root_dir(args.dataset), args.dataset + "_classes_weights.npy"
-            )
+            classes_weights_path = DATASETS_DIRS[args.dataset] / args.dataset + "_classes_weights.npy"
+
             if os.path.isfile(classes_weights_path):
                 weight = np.load(classes_weights_path)
             else:

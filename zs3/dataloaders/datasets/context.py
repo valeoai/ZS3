@@ -1,6 +1,7 @@
 import os
 import os.path as osp
 import pickle
+import pathlib
 
 import numpy as np
 import scipy
@@ -10,7 +11,9 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 
 from zs3.dataloaders import custom_transforms as tr
-from zs3.mypath import Path
+
+
+CONTEXT_DIR = pathlib.Path('./data/context/')
 
 
 class ContextSegmentation(Dataset):
@@ -22,7 +25,7 @@ class ContextSegmentation(Dataset):
     def __init__(
         self,
         args,
-        base_dir=Path.db_root_dir("context"),
+        base_dir=CONTEXT_DIR,
         split="train",
         load_embedding=None,
         w2c_size=300,
