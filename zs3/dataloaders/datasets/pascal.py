@@ -67,24 +67,23 @@ class VOCSegmentation(BaseDataset):
             unseen_classes_idx_weak,
             transform,
         )
-        self._image_dir = os.path.join(self._base_dir, "JPEGImages")
-        self._cat_dir = os.path.join(self._base_dir, "SegmentationClass")
+        self._image_dir = self._base_dir / "JPEGImages"
+        self._cat_dir = self._base_dir / "SegmentationClass"
 
         self.unseen_classes_idx_weak = unseen_classes_idx_weak
 
-        _splits_dir = os.path.join(self._base_dir, "ImageSets", "Segmentation")
+        _splits_dir = self._base_dir / "ImageSets" / "Segmentation"
 
         self.im_ids = []
         self.categories = []
 
-        with open(os.path.join(os.path.join(_splits_dir, self.split + ".txt")), "r") as f:
-            lines = f.read().splitlines()
+        lines = (_splits_dir / f"{self.split}.txt").read_text().splitlines()
 
         for ii, line in enumerate(lines):
-            _image = os.path.join(self._image_dir, line + ".jpg")
-            _cat = os.path.join(self._cat_dir, line + ".png")
-            assert os.path.isfile(_image), _image
-            assert os.path.isfile(_cat), _cat
+            _image = self._image_dir / f"{line}.jpg"
+            _cat = self._cat_dir / f"{line}.png"
+            assert _image.is_file(), _image
+            assert _cat.is_file(), _cat
 
             # if unseen classes and training split
             if len(args.unseen_classes_idx) > 0 and self.split == "train":
@@ -118,7 +117,7 @@ class VOCSegmentation(BaseDataset):
             if has_unseen_class:
                 _target = Image.open(
                     "weak_label_pascal_10_unseen_top_by_image_25.0/pascal/"
-                    + (self.categories[index].split("/"))[-1].split(".")[0]
+                    + self.categories[index].stem
                     + ".jpg"
                 )
 
@@ -134,7 +133,7 @@ class VOCSegmentation(BaseDataset):
 
         if self.load_embedding:
             self.get_embeddings(sample)
-        sample["image_name"] = self.images[index]
+        sample["image_name"] = str(self.images[index])
         return sample
 
     def _make_img_gt_point_pair(self, index):

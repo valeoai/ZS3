@@ -2,6 +2,7 @@ from torch.utils import data
 import pickle
 import torch
 import numpy as np
+from pathlib import Path
 
 
 class BaseDataset(data.Dataset):
@@ -18,7 +19,7 @@ class BaseDataset(data.Dataset):
     ):
         super().__init__()
         self.args = args
-        self._base_dir = base_dir
+        self._base_dir = Path(base_dir)
         self.split = split
         self.load_embedding = load_embedding
         self.w2c_size = w2c_size

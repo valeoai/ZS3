@@ -48,14 +48,11 @@ class ContextSegmentation(BaseDataset):
             transform,
         )
 
-        self._image_dir = os.path.join(
-            self._base_dir, "pascal/VOCdevkit/VOC2012/JPEGImages"
-        )
-        self._cat_dir = os.path.join(self._base_dir, "full_annotations/trainval")
+        self._image_dir = self._base_dir / "pascal/VOCdevkit/VOC2012/JPEGImages"
+        self._cat_dir = self._base_dir / "full_annotations/trainval"
 
         self.unseen_classes_idx_weak = unseen_classes_idx_weak
 
-        _splits_dir = os.path.join(self._base_dir)
 
         self.im_ids = []
         self.categories = []
@@ -84,14 +81,13 @@ class ContextSegmentation(BaseDataset):
             if idx > 0:
                 self.idx_59_to_idx_469[idx] = self.labels_459.index(l) + 1
 
-        with open(os.path.join(os.path.join(_splits_dir, self.split + ".txt")), "r") as f:
-            lines = f.read().splitlines()
+        lines = (self._base_dir / f"{self.split}.txt").read_text().splitlines()
 
         for ii, line in enumerate(lines):
-            _image = os.path.join(self._image_dir, line + ".jpg")
-            _cat = os.path.join(self._cat_dir, line + ".mat")
-            assert os.path.isfile(_image)
-            assert os.path.isfile(_cat)
+            _image = self._image_dir / f'{line}.jpg'
+            _cat = self._cat_dir / f"{line}.mat"
+            assert _image.is_file()
+            assert _cat.is_file()
 
             # if unseen classes and training split
             if len(args.unseen_classes_idx) > 0:
@@ -144,7 +140,7 @@ class ContextSegmentation(BaseDataset):
             if has_unseen_class:
                 _target = Image.open(
                     "weak_label_context_10_unseen_top_by_image_75.0/pascal/"
-                    + (self.categories[index].split("/"))[-1].split(".")[0]
+                    + self.categories[index].stem
                     + ".jpg"
                 )
 
@@ -160,7 +156,7 @@ class ContextSegmentation(BaseDataset):
 
         if self.load_embedding:
             self.get_embeddings(sample)
-        sample["image_name"] = self.images[index]
+        sample["image_name"] = str(self.images[index])
         return sample
 
     def _make_img_gt_point_pair(self, index):

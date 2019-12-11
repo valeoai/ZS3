@@ -44,22 +44,21 @@ class SBDSegmentation(BaseDataset):
             unseen_classes_idx_weak,
             transform,
         )
-        self._dataset_dir = os.path.join(self._base_dir, "dataset")
-        self._image_dir = os.path.join(self._dataset_dir, "img")
-        self._cat_dir = os.path.join(self._dataset_dir, "cls")
+        self._dataset_dir = self._base_dir / "dataset"
+        self._image_dir = self._dataset_dir / "img"
+        self._cat_dir = self._dataset_dir / "cls"
 
         # Get list of all images from the split and check that the files exist
         self.im_ids = []
         self.categories = []
         for splt in self.split:
-            with open(os.path.join(self._dataset_dir, splt + ".txt"), "r") as f:
-                lines = f.read().splitlines()
+            lines = (self._dataset_dir / f"{splt}.txt").read_text().splitlines()
 
             for line in lines:
-                _image = os.path.join(self._image_dir, line + ".jpg")
-                _categ = os.path.join(self._cat_dir, line + ".mat")
-                assert os.path.isfile(_image)
-                assert os.path.isfile(_categ)
+                _image = self._image_dir / f"{line}.jpg"
+                _categ = self._cat_dir / f"{line}.mat"
+                assert _image.is_file()
+                assert _categ.is_file()
 
                 # if unseen classes
                 if len(args.unseen_classes_idx) > 0:
@@ -110,7 +109,7 @@ class SBDSegmentation(BaseDataset):
             if has_unseen_class:
                 _target = Image.open(
                     "weak_label_pascal_10_unseen_top_by_image_25.0/sbd/"
-                    + (self.categories[index].split("/"))[-1].split(".")[0]
+                    + self.categories[index].stem
                     + ".jpg"
                 )
 
@@ -123,7 +122,7 @@ class SBDSegmentation(BaseDataset):
 
         if self.load_embedding:
             self.get_embeddings(sample)
-        sample["image_name"] = self.images[index]
+        sample["image_name"] = str(self.images[index])
         return sample
 
     def _make_img_gt_point_pair(self, index):
