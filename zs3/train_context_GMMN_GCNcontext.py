@@ -305,28 +305,24 @@ class Trainer:
                             has_unseen_class = True
 
                     ## construct adjacent matrix
-                    try:
-                        (
-                            adj_mat,
-                            clsidx_2_pixidx,
-                            clsidx_2_lbl,
-                            embedding_GCN_i,
-                            real_features_GCN_i,
-                        ) = construct_adj_mat(
-                            target_i_.data.cpu().numpy().squeeze(),
-                            embedding_i.data.cpu().numpy().squeeze(),
-                            real_features_i_.data.cpu()
-                            .numpy()
-                            .squeeze()
-                            .transpose(2, 0, 1),
-                            avg_feat=args.GCN_avg_feat,
-                        )
-                        if adj_mat is not None:
-                            target_GCN = target_GCN + clsidx_2_lbl
-                    except:
-                        import pdb
+                    (
+                        adj_mat,
+                        clsidx_2_pixidx,
+                        clsidx_2_lbl,
+                        embedding_GCN_i,
+                        real_features_GCN_i,
+                    ) = construct_adj_mat(
+                        target_i_.data.cpu().numpy().squeeze(),
+                        embedding_i.data.cpu().numpy().squeeze(),
+                        real_features_i_.data.cpu()
+                        .numpy()
+                        .squeeze()
+                        .transpose(2, 0, 1),
+                        avg_feat=args.GCN_avg_feat,
+                    )
+                    if adj_mat is not None:
+                        target_GCN = target_GCN + clsidx_2_lbl
 
-                        pdb.set_trace()
 
                     embedding_i = (
                         embedding_i.permute(0, 2, 3, 1)
@@ -400,40 +396,37 @@ class Trainer:
                             )
                         ).permute(2, 0, 1)
 
-                    try:
-                        # GCN generator
-                        if adj_mat is not None:
-                            self.optimizer_generator_GCN.zero_grad()
-                            embedding_GCN_i_pt = torch.FloatTensor(embedding_GCN_i).cuda()
-                            z_GCN = torch.rand((embedding_GCN_i.shape[0], args.noise_dim))
-                            if args.cuda:
-                                z_GCN = z_GCN.cuda()
-                            fake_features_GCN_i = self.generator_GCN(
-                                embedding_GCN_i_pt, z_GCN.float(), adj_mat.cuda()
+
+                    # GCN generator
+                    if adj_mat is not None:
+                        self.optimizer_generator_GCN.zero_grad()
+                        embedding_GCN_i_pt = torch.FloatTensor(embedding_GCN_i).cuda()
+                        z_GCN = torch.rand((embedding_GCN_i.shape[0], args.noise_dim))
+                        if args.cuda:
+                            z_GCN = z_GCN.cuda()
+                        fake_features_GCN_i = self.generator_GCN(
+                            embedding_GCN_i_pt, z_GCN.float(), adj_mat.cuda()
+                        )
+                        real_features_GCN_i = torch.FloatTensor(
+                            real_features_GCN_i
+                        ).cuda()
+                        if not has_unseen_class:
+                            g_GCN_loss = self.criterion_generator(
+                                fake_features_GCN_i, real_features_GCN_i
                             )
-                            real_features_GCN_i = torch.FloatTensor(
-                                real_features_GCN_i
-                            ).cuda()
-                            if not has_unseen_class:
-                                g_GCN_loss = self.criterion_generator(
-                                    fake_features_GCN_i, real_features_GCN_i
-                                )
-                                g_GCN_loss.backward()
-                                self.optimizer_generator_GCN.step()
-                                generator_GCN_loss_batch += g_GCN_loss.item()
+                            g_GCN_loss.backward()
+                            self.optimizer_generator_GCN.step()
+                            generator_GCN_loss_batch += g_GCN_loss.item()
 
-                            if args.real_seen_features and not has_unseen_class:
-                                fake_features_GCN.append(
-                                    real_features_GCN_i.detach().data.cpu().numpy()
-                                )
-                            else:
-                                fake_features_GCN.append(
-                                    fake_features_GCN_i.detach().data.cpu().numpy()
-                                )
-                    except:
-                        import pdb
+                        if args.real_seen_features and not has_unseen_class:
+                            fake_features_GCN.append(
+                                real_features_GCN_i.detach().data.cpu().numpy()
+                            )
+                        else:
+                            fake_features_GCN.append(
+                                fake_features_GCN_i.detach().data.cpu().numpy()
+                            )
 
-                        pdb.set_trace()
 
                 # ===================classification=====================
                 self.optimizer.zero_grad()
@@ -444,34 +437,25 @@ class Trainer:
                 loss.backward()
                 # GCN
                 if len(fake_features_GCN) > 0:
-                    try:
-                        fake_features_GCN = np.vstack(fake_features_GCN).transpose(1, 0)
-                        fake_features_GCN_pt = torch.unsqueeze(
-                            torch.unsqueeze(torch.FloatTensor(fake_features_GCN), 2), 0
-                        ).cuda()
-                        output_GCN = self.model.module.decoder.forward_class_prediction(
-                            fake_features_GCN_pt
-                        )
-                        target_GCN_pt = torch.unsqueeze(
-                            torch.unsqueeze(torch.FloatTensor(np.array(target_GCN)), 1),
-                            0,
-                        ).cuda()
-                        loss_GCN = args.GCN_weight * self.criterion(
-                            output_GCN, target_GCN_pt
-                        )
-                        loss_GCN.backward()
-                    except:
-                        import pdb
-
-                        pdb.set_trace()
+                    fake_features_GCN = np.vstack(fake_features_GCN).transpose(1, 0)
+                    fake_features_GCN_pt = torch.unsqueeze(
+                        torch.unsqueeze(torch.FloatTensor(fake_features_GCN), 2), 0
+                    ).cuda()
+                    output_GCN = self.model.module.decoder.forward_class_prediction(
+                        fake_features_GCN_pt
+                    )
+                    target_GCN_pt = torch.unsqueeze(
+                        torch.unsqueeze(torch.FloatTensor(np.array(target_GCN)), 1),
+                        0,
+                    ).cuda()
+                    loss_GCN = args.GCN_weight * self.criterion(
+                        output_GCN, target_GCN_pt
+                    )
+                    loss_GCN.backward()
 
                 self.optimizer.step()
                 train_loss += loss.item()
 
-                if math.isnan(train_loss):
-                    import pdb
-
-                    pdb.set_trace()
                 # ===================log=====================
                 tbar.set_description(
                     f" G loss: {generator_loss_batch:.3f}"
