@@ -5,10 +5,17 @@ import numpy as np
 
 
 class BaseDataset(data.Dataset):
-
-    def __init__(self, args, base_dir, split,
-                 load_embedding, w2c_size,
-                 weak_label, unseen_classes_idx_weak, transform):
+    def __init__(
+        self,
+        args,
+        base_dir,
+        split,
+        load_embedding,
+        w2c_size,
+        weak_label,
+        unseen_classes_idx_weak,
+        transform,
+    ):
         super().__init__()
         self.args = args
         self._base_dir = base_dir

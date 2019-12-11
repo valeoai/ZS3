@@ -9,7 +9,7 @@ from zs3.dataloaders import custom_transforms as tr
 from .base import BaseDataset, load_obj, lbl_contains_unseen
 
 
-PASCAL_DIR = pathlib.Path('./data/VOC2012')
+PASCAL_DIR = pathlib.Path("./data/VOC2012")
 
 
 class VOCSegmentation(BaseDataset):
@@ -57,9 +57,16 @@ class VOCSegmentation(BaseDataset):
         :param split: train/val
         :param transform: transform to apply
         """
-        super().__init__(args, base_dir, split,
-                         load_embedding, w2c_size,
-                         weak_label, unseen_classes_idx_weak, transform)
+        super().__init__(
+            args,
+            base_dir,
+            split,
+            load_embedding,
+            w2c_size,
+            weak_label,
+            unseen_classes_idx_weak,
+            transform,
+        )
         self._image_dir = os.path.join(self._base_dir, "JPEGImages")
         self._cat_dir = os.path.join(self._base_dir, "SegmentationClass")
 
@@ -140,7 +147,9 @@ class VOCSegmentation(BaseDataset):
             [
                 tr.RandomHorizontalFlip(),
                 tr.RandomScaleCrop(
-                    base_size=self.args.base_size, crop_size=self.args.crop_size, fill=255
+                    base_size=self.args.base_size,
+                    crop_size=self.args.crop_size,
+                    fill=255,
                 ),
                 tr.RandomGaussianBlur(),
                 tr.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),

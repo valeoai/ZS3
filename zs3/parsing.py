@@ -29,7 +29,11 @@ def get_parser():
                             comma-separated list of integers only (default=0)",
     )
     parser.add_argument(
-        "--start_epoch", type=int, default=0, metavar="N", help="start epochs (default:0)"
+        "--start_epoch",
+        type=int,
+        default=0,
+        metavar="N",
+        help="start epochs (default:0)",
     )
     parser.add_argument(
         "--test-batch-size",
@@ -75,7 +79,11 @@ def get_parser():
         help="lr scheduler mode: (default: poly)",
     )
     parser.add_argument(
-        "--momentum", type=float, default=0.9, metavar="M", help="momentum (default: 0.9)"
+        "--momentum",
+        type=float,
+        default=0.9,
+        metavar="M",
+        help="momentum (default: 0.9)",
     )
     parser.add_argument(
         "--weight-decay",

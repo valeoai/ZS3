@@ -115,12 +115,7 @@ class Trainer:
 
         # Define Dataloader
         kwargs = {"num_workers": args.workers, "pin_memory": True}
-        (
-            self.train_loader,
-            self.val_loader,
-            _,
-            self.nclass,
-        ) = make_data_loader(
+        (self.train_loader, self.val_loader, _, self.nclass,) = make_data_loader(
             args=args,
             load_embedding=args.load_embedding,
             w2c_size=args.w2c_size,
@@ -235,9 +230,7 @@ class Trainer:
                 if not args.nonlinear_last_layer and not args.random_last_layer:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
             # self.best_pred = checkpoint['best_pred']
-            print(
-                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
-            )
+            print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
 
         # Clear start epoch if fine-tuning
         if args.ft:
@@ -277,9 +270,10 @@ class Trainer:
                 semantic_reconstruction_batch = 0.0
                 fake_features_GCN = []
                 target_GCN = []
-                for count_sample_i, (real_features_i, target_i, embedding_i) in enumerate(
-                    zip(real_features, target, embedding)
-                ):
+                for (
+                    count_sample_i,
+                    (real_features_i, target_i, embedding_i),
+                ) in enumerate(zip(real_features, target, embedding)):
                     generator_loss_sample = 0.0
                     semantic_reconstruction_loss_sample = 0.0
 
@@ -459,7 +453,8 @@ class Trainer:
                             fake_features_GCN_pt
                         )
                         target_GCN_pt = torch.unsqueeze(
-                            torch.unsqueeze(torch.FloatTensor(np.array(target_GCN)), 1), 0
+                            torch.unsqueeze(torch.FloatTensor(np.array(target_GCN)), 1),
+                            0,
                         ).cuda()
                         loss_GCN = args.GCN_weight * self.criterion(
                             output_GCN, target_GCN_pt
@@ -503,7 +498,12 @@ class Trainer:
                 if i % (num_img_tr // 10) == 0:
                     global_step = i + num_img_tr * epoch
                     self.summary.visualize_image(
-                        self.writer, self.args.dataset, image, target, output, global_step
+                        self.writer,
+                        self.args.dataset,
+                        image,
+                        target,
+                        output,
+                        global_step,
                     )
 
         self.writer.add_scalar("train/total_loss_epoch", train_loss, epoch)
@@ -611,9 +611,7 @@ class Trainer:
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
         print(f"Loss: {test_loss:.3f}")
-        print(
-            f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
-        )
+        print(f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}")
         print(
             "Seen: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
                 Acc_seen, Acc_class_seen, mIoU_seen, FWIoU_seen
@@ -668,7 +666,10 @@ class Trainer:
                         saved_target[idx_unseen_class][i],
                         saved_prediction[idx_unseen_class][i],
                         global_step,
-                        name="validation_" + CLASSES_NAMES[idx_unseen_class] + "_" + str(i),
+                        name="validation_"
+                        + CLASSES_NAMES[idx_unseen_class]
+                        + "_"
+                        + str(i),
                         nb_image=1,
                     )
 

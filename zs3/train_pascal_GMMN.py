@@ -31,12 +31,7 @@ class Trainer:
 
         # Define Dataloader
         kwargs = {"num_workers": args.workers, "pin_memory": True}
-        (
-            self.train_loader,
-            self.val_loader,
-            _,
-            self.nclass,
-        ) = make_data_loader(
+        (self.train_loader, self.val_loader, _, self.nclass,) = make_data_loader(
             args, load_embedding=args.load_embedding, w2c_size=args.w2c_size, **kwargs
         )
 
@@ -130,9 +125,7 @@ class Trainer:
                 self.model.load_state_dict(checkpoint["state_dict"])
 
             # self.best_pred = checkpoint['best_pred']
-            print(
-                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
-            )
+            print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
 
         # Clear start epoch if fine-tuning
         if args.ft:
@@ -168,9 +161,10 @@ class Trainer:
                 if args.cuda:
                     fake_features = fake_features.cuda()
                 generator_loss_batch = 0.0
-                for count_sample_i, (real_features_i, target_i, embedding_i) in enumerate(
-                    zip(real_features, target, embedding)
-                ):
+                for (
+                    count_sample_i,
+                    (real_features_i, target_i, embedding_i),
+                ) in enumerate(zip(real_features, target, embedding)):
                     generator_loss_sample = 0.0
                     ## reduce to real feature size
                     real_features_i = (
@@ -288,7 +282,12 @@ class Trainer:
                 if i % (num_img_tr // 10) == 0:
                     global_step = i + num_img_tr * epoch
                     self.summary.visualize_image(
-                        self.writer, self.args.dataset, image, target, output, global_step
+                        self.writer,
+                        self.args.dataset,
+                        image,
+                        target,
+                        output,
+                        global_step,
                     )
 
         self.writer.add_scalar("train/total_loss_epoch", train_loss, epoch)
@@ -416,9 +415,7 @@ class Trainer:
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
         print(f"Loss: {test_loss:.3f}")
-        print(
-            f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
-        )
+        print(f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}")
         print(
             "Seen: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
                 Acc_seen, Acc_class_seen, mIoU_seen, FWIoU_seen

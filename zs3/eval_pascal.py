@@ -30,12 +30,9 @@ class Trainer:
 
         # Define Dataloader
         kwargs = {"num_workers": args.workers, "pin_memory": True}
-        (
-            self.train_loader,
-            self.val_loader,
-            _,
-            self.nclass,
-        ) = make_data_loader(args, **kwargs)
+        (self.train_loader, self.val_loader, _, self.nclass,) = make_data_loader(
+            args, **kwargs
+        )
 
         model = DeepLab(
             num_classes=self.nclass,
@@ -60,7 +57,9 @@ class Trainer:
         # Define Criterion
         # whether to use class balanced weights
         if args.use_balanced_weights:
-            classes_weights_path = DATASETS_DIRS[args.dataset] / args.dataset + "_classes_weights.npy"
+            classes_weights_path = (
+                DATASETS_DIRS[args.dataset] / args.dataset + "_classes_weights.npy"
+            )
 
             if os.path.isfile(classes_weights_path):
                 weight = np.load(classes_weights_path)
@@ -125,9 +124,7 @@ class Trainer:
                 if not args.nonlinear_last_layer:
                     self.optimizer.load_state_dict(checkpoint["optimizer"])
             self.best_pred = checkpoint["best_pred"]
-            print(
-                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
-            )
+            print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
 
         # Clear start epoch if fine-tuning
         if args.ft:
@@ -232,9 +229,7 @@ class Trainer:
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
         print(f"Loss: {test_loss:.3f}")
-        print(
-            f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
-        )
+        print(f"Overall: Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}")
         print(
             "Seen: Acc:{}, Acc_class:{}, mIoU:{}, fwIoU: {}".format(
                 Acc_seen, Acc_class_seen, mIoU_seen, FWIoU_seen
@@ -255,7 +250,10 @@ class Trainer:
 
         all_target = np.concatenate(all_target)
         all_pred = np.concatenate(all_pred)
-        metric_values, metric_by_class = self.evaluator_seen_unseen.label_accuracy_score(
+        (
+            metric_values,
+            metric_by_class,
+        ) = self.evaluator_seen_unseen.label_accuracy_score(
             all_target, all_pred, by_class=True
         )
         metric_values = np.array(metric_values)
@@ -456,7 +454,6 @@ def main():
             )
 
     args.sync_bn = args.cuda and len(args.gpu_ids) > 1
-
 
     # default settings for epochs, batch_size and lr
     if args.epochs is None:

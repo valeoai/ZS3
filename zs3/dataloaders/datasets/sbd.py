@@ -9,7 +9,7 @@ from torchvision import transforms
 from zs3.dataloaders import custom_transforms as tr
 from .base import BaseDataset, load_obj, lbl_contains_unseen
 
-SBD_DIR = pathlib.Path('./data/VOC2012/benchmark_RELEASE')
+SBD_DIR = pathlib.Path("./data/VOC2012/benchmark_RELEASE")
 
 
 class SBDSegmentation(BaseDataset):
@@ -34,9 +34,16 @@ class SBDSegmentation(BaseDataset):
         if isinstance(split, str):
             split = [split]
         split.sort()
-        super().__init__(args, base_dir, split,
-                         load_embedding, w2c_size,
-                         weak_label, unseen_classes_idx_weak, transform)
+        super().__init__(
+            args,
+            base_dir,
+            split,
+            load_embedding,
+            w2c_size,
+            weak_label,
+            unseen_classes_idx_weak,
+            transform,
+        )
         self._dataset_dir = os.path.join(self._base_dir, "dataset")
         self._image_dir = os.path.join(self._dataset_dir, "img")
         self._cat_dir = os.path.join(self._dataset_dir, "cls")

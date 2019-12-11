@@ -31,12 +31,9 @@ class Trainer:
 
         # Define Dataloader
         kwargs = {"num_workers": args.workers, "pin_memory": True}
-        (
-            self.train_loader,
-            self.val_loader,
-            _,
-            self.nclass,
-        ) = make_data_loader(args, **kwargs)
+        (self.train_loader, self.val_loader, _, self.nclass,) = make_data_loader(
+            args, **kwargs
+        )
 
         # Define network
         model = DeepLab(
@@ -64,7 +61,9 @@ class Trainer:
         # Define Criterion
         # whether to use class balanced weights
         if args.use_balanced_weights:
-            classes_weights_path = DATASETS_DIRS[args.dataset] / args.dataset + "_classes_weights.npy"
+            classes_weights_path = (
+                DATASETS_DIRS[args.dataset] / args.dataset + "_classes_weights.npy"
+            )
             if os.path.isfile(classes_weights_path):
                 weight = np.load(classes_weights_path)
             else:
@@ -106,9 +105,7 @@ class Trainer:
             if not args.ft:
                 self.optimizer.load_state_dict(checkpoint["optimizer"])
             self.best_pred = checkpoint["best_pred"]
-            print(
-                f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})"
-            )
+            print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
 
         # Clear start epoch if fine-tuning
         if args.ft:
@@ -140,7 +137,12 @@ class Trainer:
                 if i % (num_img_tr // 10) == 0:
                     global_step = i + num_img_tr * epoch
                     self.summary.visualize_image(
-                        self.writer, self.args.dataset, image, target, output, global_step
+                        self.writer,
+                        self.args.dataset,
+                        image,
+                        target,
+                        output,
+                        global_step,
                     )
 
         self.writer.add_scalar("train/total_loss_epoch", train_loss, epoch)
@@ -198,9 +200,7 @@ class Trainer:
             "[Epoch: %d, numImages: %5d]"
             % (epoch, i * self.args.batch_size + image.data.shape[0])
         )
-        print(
-            f"Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}"
-        )
+        print(f"Acc:{Acc}, Acc_class:{Acc_class}, mIoU:{mIoU}, fwIoU: {FWIoU}")
         print(f"Loss: {test_loss:.3f}")
 
         for i, (class_name, acc_value, mIoU_value) in enumerate(
@@ -276,7 +276,10 @@ def main():
     )
     # checking point
     parser.add_argument(
-        "--resume", type=str, default=None, help="put the path to resuming file if needed"
+        "--resume",
+        type=str,
+        default=None,
+        help="put the path to resuming file if needed",
     )
     parser.add_argument(
         "--checkname",

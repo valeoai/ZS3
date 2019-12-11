@@ -32,7 +32,8 @@ class TensorboardSummary:
         writer.add_image(name + "_Image", grid_image, global_step)
         grid_image = make_grid(
             decode_seg_map_sequence(
-                torch.max(output[:nb_image], 1)[1].detach().cpu().numpy(), dataset=dataset
+                torch.max(output[:nb_image], 1)[1].detach().cpu().numpy(),
+                dataset=dataset,
             ),
             nb_image,
             normalize=False,
