@@ -16,10 +16,10 @@ from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
 from zs3.parsing import get_parser
 from zs3.exp_data import CLASSES_NAMES
-from zs3.common_stuff import do_training
+from zs3.base_trainer import BaseTrainer
 
 
-class Trainer:
+class Trainer(BaseTrainer):
     def __init__(self, args):
         self.args = args
 
@@ -111,9 +111,6 @@ class Trainer:
         # Clear start epoch if fine-tuning
         if args.ft:
             args.start_epoch = 0
-
-    def training(self, epoch):
-        do_training(self, epoch)
 
     def validation(self, epoch):
         self.model.eval()
