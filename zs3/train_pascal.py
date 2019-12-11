@@ -15,6 +15,7 @@ from zs3.utils.metrics import Evaluator
 from zs3.utils.saver import Saver
 from zs3.utils.summaries import TensorboardSummary
 from zs3.parsing import get_parser
+from zs3.exp_data import CLASSES_NAMES
 
 
 class Trainer:
@@ -169,29 +170,7 @@ class Trainer:
             )
 
     def validation(self, epoch):
-        class_names = [
-            "background",  # class 0
-            "aeroplane",  # class 1
-            "bicycle",  # class 2
-            "bird",  # class 3
-            "boat",  # class 4
-            "bottle",  # class 5
-            "bus",  # class 6
-            "car",  # class 7
-            "cat",  # class 8
-            "chair",  # class 9
-            "cow",  # class 10
-            "diningtable",  # class 11
-            "dog",  # class 12
-            "horse",  # class 13
-            "motorbike",  # class 14
-            "person",  # class 15
-            "potted plant",  # class 16
-            "sheep",  # class 17
-            "sofa",  # class 18
-            "train",  # class 19
-            "tv/monitor",  # class 20
-        ]
+        class_names = CLASSES_NAMES[:21]
         self.model.eval()
         self.evaluator.reset()
         tbar = tqdm(self.val_loader, desc="\r")

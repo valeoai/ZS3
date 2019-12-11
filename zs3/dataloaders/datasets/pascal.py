@@ -1,4 +1,3 @@
-import os
 import pathlib
 
 import numpy as np
@@ -13,29 +12,6 @@ PASCAL_DIR = pathlib.Path("./data/VOC2012")
 
 
 class VOCSegmentation(BaseDataset):
-    class_names = [
-        "background",  # class 0
-        "aeroplane",  # class 1
-        "bicycle",  # class 2
-        "bird",  # class 3
-        "boat",  # class 4
-        "bottle",  # class 5
-        "bus",  # class 6
-        "car",  # class 7
-        "cat",  # class 8
-        "chair",  # class 9
-        "cow",  # class 10
-        "diningtable",  # class 11
-        "dog",  # class 12
-        "horse",  # class 13
-        "motorbike",  # class 14
-        "person",  # class 15
-        "potted plant",  # class 16
-        "sheep",  # class 17
-        "sofa",  # class 18
-        "train",  # class 19
-        "tv/monitor",  # class 20
-    ]
     """
     PascalVoc dataset
     """
