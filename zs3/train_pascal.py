@@ -133,10 +133,6 @@ class Trainer(BaseTrainer):
             # Add batch sample into evaluator
             self.evaluator.add_batch(target, pred)
 
-            if os.environ.get("DRY_RUN", "0") == "1" and i == 1:
-                print("Done, breaking now.")
-                break
-
         # Fast test during the training
         Acc = self.evaluator.Pixel_Accuracy()
         Acc_class, Acc_class_by_class = self.evaluator.Pixel_Accuracy_Class()
@@ -318,10 +314,6 @@ def main():
             args.eval_interval - 1
         ):
             trainer.validation(epoch)
-
-        if os.environ.get("DRY_RUN", "0") == "1" and epoch == 11:
-            print("Done, breaking now.")
-            break
     trainer.writer.close()
 
 

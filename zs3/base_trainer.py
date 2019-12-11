@@ -1,5 +1,4 @@
 from tqdm import tqdm
-import os
 
 
 class BaseTrainer:
@@ -36,10 +35,6 @@ class BaseTrainer:
                         output,
                         global_step,
                     )
-
-            if os.environ.get("DRY_RUN", "0") == "1" and i == 1:
-                print("Done, breaking now.")
-                break
 
         self.writer.add_scalar("train/total_loss_epoch", train_loss, epoch)
         print(
