@@ -210,7 +210,8 @@ python eval_context.py
     - `unseen_classes_idx_metric`: List of idx of unseen classes.
 
 ## Acknowledgements
-This codebase is heavily borrowed from [pytorch-deeplab-xception](https://github.com/jfzhang95/pytorch-deeplab-xception).
+* This codebase is heavily borrowed from [pytorch-deeplab-xception](https://github.com/jfzhang95/pytorch-deeplab-xception).
+* Special thanks for [@gabrieldemarmiesse](https://github.com/gabrieldemarmiesse) for his work in enhancing, cleaning and formatting this repository for release.
 
 ## License
 ZS3Net is released under the [Apache 2.0 license](./LICENSE).
