@@ -223,20 +223,6 @@ class Trainer:
             self.writer.add_scalar("mIoU_by_class/" + class_name, mIoU_value, epoch)
             print(class_name, "- acc:", acc_value, " mIoU:", mIoU_value)
 
-        new_pred = mIoU
-        if new_pred > self.best_pred:
-            is_best = True
-            self.best_pred = new_pred
-            self.saver.save_checkpoint(
-                {
-                    "epoch": epoch + 1,
-                    "state_dict": self.model.module.state_dict(),
-                    "optimizer": self.optimizer.state_dict(),
-                    "best_pred": self.best_pred,
-                },
-                is_best,
-            )
-
 
 def main():
     parser = get_parser()
